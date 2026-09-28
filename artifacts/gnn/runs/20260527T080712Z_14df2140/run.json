@@ -1,0 +1,46 @@
+{
+  "run_id": "20260527T080712Z_14df2140",
+  "stage": "gnn",
+  "run_type": "scratch",
+  "created_utc": "2026-05-27T10:33:11Z",
+  "git_revision": null,
+  "hyperparams": {
+    "epochs_requested": 60,
+    "batch_size": 32,
+    "lr": 0.001,
+    "dropout": 0.2,
+    "weight_decay": 0.0001,
+    "early_stop_patience": 8,
+    "lr_patience": 5,
+    "lr_factor": 0.5,
+    "min_lr": 1e-06,
+    "temperature": 0.1,
+    "scene_dropout_prob": 0.15
+  },
+  "loss_weights": {
+    "fine_label": 2.0,
+    "row_contrastive": 1.5,
+    "row_ordinal": 1.0,
+    "col_contrastive": 1.5,
+    "col_ordinal": 1.0,
+    "eq_type": 1.0,
+    "edge_type": 0.3
+  },
+  "metrics": {
+    "val": {
+      "fine_label_accuracy": 0.9884971413013885,
+      "eq_type_accuracy": 0.907108239095315,
+      "combined_score": 0.9478026901983518
+    },
+    "test": {
+      "fine_label_accuracy": 0.989332159306421,
+      "fine_label_macro_f1": 0.9901692353980378,
+      "row_cluster_accuracy": 0.9209159026756738,
+      "col_cluster_accuracy": 0.7630433438114209,
+      "within_row_ord_accuracy": 0.7330330533730697,
+      "within_col_ord_accuracy": 0.7799715524248171,
+      "equation_type_accuracy": 0.9006462035541195,
+      "exact_scene_match": 0.4911147011308562
+    }
+  }
+}

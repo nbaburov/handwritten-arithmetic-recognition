@@ -1,0 +1,69 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Testing
+.pytest_cache/
+.coverage
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tools / session state
+.claude/
+
+# Environment
+.env
+!.env.example   # un-ignore committed template (global gitignore matches .env.*)
+
+# Data (large local assets, not reproducible from source alone)
+data/raw/
+data/generated/
+
+# Model weights (large binaries, download or train locally)
+*.pt
+*.pth
+*.onnx
+*.safetensors
+
+# Logs
+*.log
+
+# Per-run YOLO training visualizations (~19M per run: confusion matrices, batch images, curves).
+# We keep run.json + eval.md + index.json under artifacts/*/runs/ for reproducibility.
+artifacts/*/runs/*/yolo/
+
+# External collab project (separate git history, separate venv)
+collab/
+deploy/vastai/pool_crohme.tar.gz
+deploy/vastai/har_results*.tar.gz
+deploy/vastai/har_bundle.tar.gz
+deploy/share/har_weights.tar.gz
+# client model kit: generator is tracked, the built zip + staged weights are not
+deploy/share/har_client_models.zip
+deploy/share/client_kit/
+# set-maker runtime session state (per-user, not shared) + review scaffolding
+data/setmaker/state/
+reports/eval_review/
+
+# stray root weights bundle (keep only deploy/share copy ignored)
+har_weights.tar.gz
+
+# Demo debug session log (per-Check JSONL trail)
+data/demo/
+
+# Real handwriting collected with the set-maker is never committed
+data/eval/real/
+data/setmaker/train/*
+!data/setmaker/train/.gitkeep

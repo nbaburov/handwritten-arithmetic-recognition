@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "_provenance": "Machine-readable per-scene_case quota single source of truth for the set-maker worklist planner. The eval block is derived from data/eval/real/draw-tracker.md (128 scenes, 32 per equation_kind, stratified across scene_cases). The three structure-only cases (bare_digits, standalone_bar, standalone_bracket) are not in the draw-tracker; small dedicated quotas are added here per the plan because the model must still produce correct row/col/fine_label for them. The train block is a provisional per-case collection target; the gap-driven planner allocates a per-round budget across cases proportional to weakness (read from reports/eval/history.jsonl) with a per-case floor and the value below acting as the per-case cap. draw-tracker.md is a human-readable view derived from this file; the planner never parses markdown.",
+  "scene_case_ontology": [
+    "addition",
+    "subtraction",
+    "multiplication-simple",
+    "multiplication-multi",
+    "division-short",
+    "division-long",
+    "division-simple",
+    "addition_op_right",
+    "addition_no_bar",
+    "subtraction_op_right",
+    "subtraction_no_bar",
+    "multiplication_simple_op_right",
+    "multiplication_simple_no_bar",
+    "subtraction_heavy_borrow",
+    "addition_dense_carries",
+    "addition_no_carries",
+    "bare_digits",
+    "standalone_bar",
+    "standalone_bracket",
+    "bare_digit_grid"
+  ],
+  "eval": {
+    "_note": "Equation-kind blocks total 32 each (addition / subtraction / multiplication / division) exactly matching draw-tracker.md stratification. Structure-only cases (bare_digits, standalone_bar, standalone_bracket) carry a small dedicated quota. bare_digit_grid is a multi-row/col clean digit grid (ood_unknown) added to cover the row/col-clustering gap single-row bare_digits cannot exercise; it carries a small dedicated quota too. error_cases is a per-equation-kind quota for deliberately-wrong scenes (human draws equation WITH a mistake and tags the error_kind); these are served with directive='error' and require a non-null error_kind on save. 4 per operation kind = 16 total.",
+    "error_cases": {
+      "addition": 4,
+      "subtraction": 4,
+      "multiplication": 4,
+      "division": 4
+    },
+    "per_equation_kind_total": 32,
+    "structure_only_per_case": 12,
+    "scene_cases": {
+      "addition": 13,
+      "addition_dense_carries": 6,
+      "addition_no_carries": 5,
+      "addition_op_right": 5,
+      "addition_no_bar": 3,
+      "subtraction": 12,
+      "subtraction_heavy_borrow": 10,
+      "subtraction_op_right": 6,
+      "subtraction_no_bar": 4,
+      "multiplication-simple": 10,
+      "multiplication-multi": 14,
+      "multiplication_simple_op_right": 4,
+      "multiplication_simple_no_bar": 4,
+      "division-short": 13,
+      "division-long": 11,
+      "division-simple": 8,
+      "bare_digits": 12,
+      "standalone_bar": 12,
+      "standalone_bracket": 12,
+      "bare_digit_grid": 10
+    }
+  },
+  "train": {
+    "_note": "Provisional per-case targets / caps for the gap-driven planner. Base 40 for equation cases; 60 for the cases the draw-tracker flags as weakest (division-short highest priority, division-long, multiplication-multi weakest col placement, subtraction_heavy_borrow, addition_dense_carries); 20 for structure-only cases. error_cases mirrors eval.error_cases but at the larger train scale: deliberately-wrong scenes (human draws the equation WITH a mistake and tags the error_kind) served with directive='error'. These exist because the measured real gap is the operator/equation-kind head (addition eq_kind 0.19, subtraction 0.14); wrong-operator and wrong-carry/borrow scenes are exactly the as-drawn-error supervision that head needs. The planner appends train error items deficit-driven from existing train error sidecars (train GT files carrying an error_kind marker), disjoint seed namespace. 10 per operation kind = 40 total; this acts as the per-kind cap, not a hard floor. division-long is intentionally set to 0 so the gap planner excludes it from the train worklist (a cap <= 0 case is dropped); the other division cases (division-short, division-simple) are unaffected.",
+    "structure_only_per_case": 20,
+    "error_cases": {
+      "addition": 10,
+      "subtraction": 10,
+      "multiplication": 10,
+      "division": 10
+    },
+    "scene_cases": {
+      "addition": 40,
+      "addition_dense_carries": 60,
+      "addition_no_carries": 40,
+      "addition_op_right": 40,
+      "addition_no_bar": 40,
+      "subtraction": 40,
+      "subtraction_heavy_borrow": 60,
+      "subtraction_op_right": 40,
+      "subtraction_no_bar": 40,
+      "multiplication-simple": 40,
+      "multiplication-multi": 60,
+      "multiplication_simple_op_right": 40,
+      "multiplication_simple_no_bar": 40,
+      "division-short": 60,
+      "division-long": 0,
+      "division-simple": 40,
+      "bare_digits": 20,
+      "standalone_bar": 20,
+      "standalone_bracket": 20,
+      "bare_digit_grid": 20
+    }
+  }
+}

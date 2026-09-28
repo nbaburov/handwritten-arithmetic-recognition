@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0003",
+  "equation_kind": "addition",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0003",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {"flattened": "main_3", "bbox_px": [78, 41, 139, 125]},
+    {"flattened": "main_2", "bbox_px": [148, 44, 207, 125]},
+    {"flattened": "main_1", "bbox_px": [199, 42, 266, 122]},
+    {"flattened": "main_1", "bbox_px": [85, 137, 148, 208]},
+    {"flattened": "main_4", "bbox_px": [161, 144, 198, 208]},
+    {"flattened": "main_7", "bbox_px": [216, 140, 273, 205]},
+    {"flattened": "result_bar", "bbox_px": [102, 243, 153, 304]},
+    {"flattened": "main_4", "bbox_px": [174, 233, 204, 297]},
+    {"flattened": "main_6", "bbox_px": [220, 232, 272, 294]},
+    {"flattened": "main_8", "bbox_px": [287, 215, 322, 251]},
+    {"flattened": "op_plus", "bbox_px": [0.0, 0.0, 0.1, 0.1]}
+  ],
+  "intended_text": "321 + 147 = 468 + (trailing + at end)",
+  "notes": "Audit fix (2026-05-21): removed spurious op_plus between top/middle rows; corrected first result digit main_6 -> main_4. Trailing + at end kept as unlocated missed (sentinel bbox).",
+  "has_unlocated_missed": true,
+  "n_missed_unlocated": 1
+}

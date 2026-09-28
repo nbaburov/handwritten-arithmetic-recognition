@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0016",
+  "equation_kind": "addition",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0019",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {"flattened": "main_3", "bbox_px": [252, 108, 297, 186]},
+    {"flattened": "main_4", "bbox_px": [329, 90, 366, 193]},
+    {"flattened": "main_8", "bbox_px": [259, 233, 306, 305]},
+    {"flattened": "main_3", "bbox_px": [334, 234, 376, 300]},
+    {"flattened": "op_plus", "bbox_px": [66, 310, 112, 364]},
+    {"flattened": "result_bar", "bbox_px": [154, 332, 463, 344]},
+    {"flattened": "main_1", "bbox_px": [206, 383, 217, 471]},
+    {"flattened": "main_1", "bbox_px": [273, 384, 290, 463]},
+    {"flattened": "main_6", "bbox_px": [346, 353, 405, 451]}
+  ],
+  "intended_text": "34 + 83 = 116 (incorrect math; annotation reflects drawn)",
+  "notes": "Audit fix (2026-05-21): rewrote all 9 symbols from connected components. Top 34, middle 83, +, bar, result 116. Removed wrong main_8 at start (was 3) and extra main_1."
+}

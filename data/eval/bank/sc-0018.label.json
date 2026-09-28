@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0018",
+  "equation_kind": "addition",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0022",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {"flattened": "carry_2", "bbox_px": [222, 3, 231, 14]},
+    {"flattened": "main_1", "bbox_px": [120, 21, 125, 78]},
+    {"flattened": "main_2", "bbox_px": [196, 23, 238, 78]},
+    {"flattened": "main_6", "bbox_px": [281, 0, 336, 80]},
+    {"flattened": "main_3", "bbox_px": [99, 100, 173, 173]},
+    {"flattened": "main_4", "bbox_px": [207, 101, 245, 183]},
+    {"flattened": "main_5", "bbox_px": [280, 101, 356, 165]},
+    {"flattened": "op_plus", "bbox_px": [370, 182, 438, 240]},
+    {"flattened": "result_bar", "bbox_px": [114, 223, 320, 237]},
+    {"flattened": "main_4", "bbox_px": [125, 281, 171, 370]},
+    {"flattened": "main_7", "bbox_px": [209, 265, 257, 339]},
+    {"flattened": "main_1", "bbox_px": [300, 292, 311, 363]}
+  ],
+  "intended_text": "carry 2; 126 + 345 = 471 (+ trailing at right)",
+  "notes": "Audit fix (2026-05-21): rewrote 12 symbols. Carry_2 tick at top above 2. Top 126, middle 345, op_plus at right edge, bar, result 471."
+}

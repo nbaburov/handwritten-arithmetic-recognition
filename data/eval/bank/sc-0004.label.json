@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0004",
+  "equation_kind": "multiplication",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0004",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {"flattened": "main_7", "bbox_px": [83, 107, 181, 252]},
+    {"flattened": "main_9", "bbox_px": [170, 107, 253, 256]},
+    {"flattened": "op_times", "bbox_px": [287, 155, 352, 219]},
+    {"flattened": "main_1", "bbox_px": [397, 134, 411, 234]},
+    {"flattened": "main_6", "bbox_px": [439, 119, 480, 235]},
+    {"flattened": "result_bar", "bbox_px": [481, 167, 512, 190]},
+    {"flattened": "main_9", "bbox_px": [266, 295, 358, 445]},
+    {"flattened": "main_1", "bbox_px": [383, 299, 394, 412]},
+    {"flattened": "main_8", "bbox_px": [426, 301, 468, 409]}
+  ],
+  "intended_text": "79 x 16 = 918",
+  "notes": "Audit fix (2026-05-21): horizontal equation rewritten. 9 symbols from connected components. '=' sign labeled as result_bar (structural separator)."
+}

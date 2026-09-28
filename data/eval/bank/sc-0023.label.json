@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0023",
+  "equation_kind": "division",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0027",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {"flattened": "main_5", "bbox_px": [64, 125, 128, 192]},
+    {"flattened": "div_bracket", "bbox_px": [140, 67, 356, 315]},
+    {"flattened": "main_4", "bbox_px": [190, 57, 235, 105]},
+    {"flattened": "main_5", "bbox_px": [240, 57, 285, 105]},
+    {"flattened": "main_8", "bbox_px": [285, 60, 340, 192]},
+    {"flattened": "main_6", "bbox_px": [220, 140, 280, 220]},
+    {"flattened": "result_bar", "bbox_px": [208, 215, 337, 226]},
+    {"flattened": "main_7", "bbox_px": [275, 248, 324, 303]},
+    {"flattened": "main_8", "bbox_px": [328, 249, 361, 310]}
+  ],
+  "intended_text": "5 ) 458, 6, bar, 78 (short division)",
+  "notes": "Audit fix (2026-05-21): rewrote 9 symbols. Per user verification bottom is 78. Top 458 digits merge with div_bracket in CC; bboxes estimated."
+}

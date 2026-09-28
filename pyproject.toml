@@ -1,0 +1,11 @@
+[tool.pytest.ini_options]
+addopts = "-m 'not eval'"
+markers = [
+    "eval: regression tests; requires weights + labels; excluded from default suite",
+]
+# Suppress noise from third-party libs we cannot fix here. Our own code must stay warning-free;
+# add new entries here only if the warning is provably out of our control + non-actionable.
+filterwarnings = [
+    "ignore:`torch_geometric.distributed` has been deprecated since 2.7.0:DeprecationWarning",
+    "ignore:`torch.jit.script` is deprecated.:DeprecationWarning",
+]

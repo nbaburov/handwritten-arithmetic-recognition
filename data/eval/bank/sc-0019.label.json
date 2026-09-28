@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0019",
+  "equation_kind": "addition",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0023",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {
+      "flattened": "main_5",
+      "bbox_px": [
+        111.49836730957031,
+        89.12033081054688,
+        150.9484405517578,
+        147.5711669921875
+      ]
+    },
+    {
+      "flattened": "main_8",
+      "bbox_px": [
+        164.21682739257812,
+        91.77880859375,
+        210.48892211914062,
+        156.1289520263672
+      ]
+    },
+    {
+      "flattened": "op_plus",
+      "bbox_px": [
+        47.46403884887695,
+        164.72421264648438,
+        91.82475280761719,
+        210.88079833984375
+      ]
+    },
+    {
+      "flattened": "main_1",
+      "bbox_px": [
+        113.5916748046875,
+        176.55030822753906,
+        135.82022094726562,
+        242.6846160888672
+      ]
+    },
+    {
+      "flattened": "main_2",
+      "bbox_px": [
+        153.8351593017578,
+        176.11404418945312,
+        221.0072784423828,
+        256.0321350097656
+      ]
+    },
+    {
+      "flattened": "result_bar",
+      "bbox_px": [
+        70.51913452148438,
+        264.0703125,
+        268.3744812011719,
+        275.2166748046875
+      ]
+    }
+  ],
+  "intended_text": "58+12=",
+  "notes": "extra 0 9 between row and bar likely stray strokes"
+}

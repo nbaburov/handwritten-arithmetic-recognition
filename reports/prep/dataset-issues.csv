@@ -1,0 +1,2 @@
+kind,path,detail
+invalid_extension,./data/combined/.DS_Store,"Expected .png, got "

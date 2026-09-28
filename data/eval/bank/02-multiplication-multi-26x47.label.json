@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "sample": "02-multiplication-multi-26x47",
+  "equation_kind": "multiplication",
+  "symbols": [
+    {"flattened": "carry_2", "bbox_px": [268, 19, 284, 36]},
+    {"flattened": "carry_4", "bbox_px": [266, 50, 283, 72]},
+    {"flattened": "main_2", "bbox_px": [242, 87, 299, 132]},
+    {"flattened": "main_6", "bbox_px": [315, 84, 367, 130]},
+    {"flattened": "main_4", "bbox_px": [242, 159, 279, 214]},
+    {"flattened": "main_7", "bbox_px": [331, 158, 386, 200]},
+    {"flattened": "op_times", "bbox_px": [88, 204, 160, 260]},
+    {"flattened": "result_bar", "bbox_px": [195, 223, 447, 243]},
+    {"flattened": "main_1", "bbox_px": [312, 242, 336, 287]},
+    {"flattened": "main_8", "bbox_px": [349, 256, 368, 290]},
+    {"flattened": "main_2", "bbox_px": [383, 256, 412, 288]},
+    {"flattened": "op_plus", "bbox_px": [230, 316, 254, 350]},
+    {"flattened": "main_1", "bbox_px": [290, 305, 304, 334]},
+    {"flattened": "main_0", "bbox_px": [319, 306, 334, 328]},
+    {"flattened": "main_4", "bbox_px": [347, 297, 370, 341]},
+    {"flattened": "result_bar", "bbox_px": [283, 338, 448, 354]},
+    {"flattened": "main_1", "bbox_px": [283, 364, 304, 394]},
+    {"flattened": "main_2", "bbox_px": [324, 360, 340, 385]},
+    {"flattened": "main_2", "bbox_px": [355, 361, 378, 382]},
+    {"flattened": "main_2", "bbox_px": [394, 357, 414, 383]}
+  ],
+  "intended_text": "26 x 47 = 1222 (partial products 182 + 104)",
+  "notes": "Manual annotation: multi-digit multiplication. Top carries (2 above 4). Top operand 26. Multiplier x47. First partial 182. Second partial +104 (shifted left). Final result 1222. 20 symbols total. Bboxes from connected-component analysis on preprocessed 512x512.",
+  "pending_manual_review": false
+}

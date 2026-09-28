@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0017",
+  "equation_kind": "addition",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0021",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {"flattened": "carry_1", "bbox_px": [155, 18, 158, 40]},
+    {"flattened": "main_2", "bbox_px": [115, 61, 196, 180]},
+    {"flattened": "main_7", "bbox_px": [209, 63, 271, 165]},
+    {"flattened": "main_3", "bbox_px": [298, 56, 368, 166]},
+    {"flattened": "main_4", "bbox_px": [131, 216, 190, 313]},
+    {"flattened": "main_7", "bbox_px": [217, 212, 279, 320]},
+    {"flattened": "main_2", "bbox_px": [302, 214, 368, 330]},
+    {"flattened": "result_bar", "bbox_px": [139, 326, 400, 357]},
+    {"flattened": "main_7", "bbox_px": [143, 364, 220, 448]},
+    {"flattened": "main_4", "bbox_px": [220, 364, 289, 448]},
+    {"flattened": "main_5", "bbox_px": [313, 376, 384, 455]},
+    {"flattened": "op_plus", "bbox_px": [420, 292, 473, 380]}
+  ],
+  "intended_text": "carry 1; 273 + 472 = 745 (trailing + at end)",
+  "notes": "Audit fix (2026-05-21): rewrote 12 symbols. Carry_1 at top. Top 273, middle 472, bar, result 745, trailing + on right side. Result digits 7+4 merged in CC; split heuristically."
+}

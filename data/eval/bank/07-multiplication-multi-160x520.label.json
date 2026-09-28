@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "sample": "07-multiplication-multi-160x520",
+  "equation_kind": "multiplication",
+  "symbols": [
+    {"flattened": "main_1", "bbox_px": [151, 99, 227, 155]},
+    {"flattened": "main_6", "bbox_px": [220, 110, 256, 166]},
+    {"flattened": "main_0", "bbox_px": [296, 107, 372, 175]},
+    {"flattened": "op_times", "bbox_px": [84, 229, 137, 279]},
+    {"flattened": "main_5", "bbox_px": [178, 200, 249, 246]},
+    {"flattened": "main_2", "bbox_px": [249, 200, 320, 246]},
+    {"flattened": "main_0", "bbox_px": [322, 194, 368, 246]},
+    {"flattened": "result_bar", "bbox_px": [184, 270, 441, 278]},
+    {"flattened": "main_6", "bbox_px": [169, 308, 215, 365]},
+    {"flattened": "main_7", "bbox_px": [236, 315, 276, 378]},
+    {"flattened": "main_4", "bbox_px": [296, 312, 331, 385]}
+  ],
+  "intended_text": "160 x 520 = 674",
+  "notes": "Manual annotation: 3-digit multiplication. Top 160, middle x520, result_bar, bottom 674 (incorrect math, but labels reflect what's drawn). 11 symbols. The '52' digits share one connected component on preprocessed canvas; split heuristically at x=249. Bboxes from connected-component analysis on preprocessed 512x512.",
+  "pending_manual_review": false
+}

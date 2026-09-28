@@ -1,0 +1,429 @@
+{
+  "html": "<engine-exercise session-id=\"5fd026d3-0f78-448c-b679-aacb6bee3cde\" app-id=\"demo.exercise-app\" engine-init=\"inline\" solution-mode=\"true\" ><script type=\"grading/init-data\">{\"view\":{\"i18n\":[\"uk\",\"en\"],\"showHints\":true,\"numeralSystem\":\"ARABIC_DECIMALPOINT\",\"elements\":[{\"id\":\"Q1\",\"type\":\"QUESTION\",\"instructionType\":\"SCRIPT\",\"content\":[{\"mimeType\":\"text/plain\",\"content\":\"<div data-ref-id=\\\"ZxmHv\\\" data-ref-name=\\\"Block 1\\\">Calculate \"},{\"mimeType\":\"application/x-tex\",\"content\":\"$38$\",\"engine\":\"FormattedNumber[38, 0, 0]\"},{\"mimeType\":\"text/plain\",\"content\":\" times \"},{\"mimeType\":\"application/x-tex\",\"content\":\"$29$\",\"engine\":\"FormattedNumber[29, 0, 0]\"},{\"mimeType\":\"text/plain\",\"content\":\".</div><p><engine-interaction ref-id=\\\"K0HwQ\\\" ref-name=\\\"I1\\\"></engine-interaction></p>\"}],\"interactions\":[{\"id\":\"K0HwQ\",\"ans\":{\"id\":\"$$\\\\verb|solution|$$\",\"type\":\"ARITHMETIC\",\"i18n\":[\"en\"],\"width\":4,\"height\":8,\"attributeMap\":{\"areaMap\":{\"product\":{\"id\":\"product\",\"left\":0,\"bottom\":7,\"width\":4,\"type\":\"OVERFLOW\",\"multilevel\":true},\"rtl_line_0\":{\"id\":\"rtl_line_0\",\"left\":3,\"bottom\":3,\"width\":1,\"type\":\"RIGHT_TO_LEFT\"},\"rtl_line_1\":{\"id\":\"rtl_line_1\",\"left\":3,\"bottom\":2,\"width\":1,\"type\":\"RIGHT_TO_LEFT\"},\"answer-line\":{\"id\":\"answer-line\",\"left\":0,\"bottom\":1,\"width\":4,\"type\":\"LINE\"},\"rtl_answer\":{\"id\":\"rtl_answer\",\"left\":3,\"bottom\":0,\"width\":1,\"type\":\"RIGHT_TO_LEFT\"}}},\"tokens\":[{\"id\":\"G4\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":1,\"y\":4,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]},{\"id\":\"G5\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":2,\"y\":4,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]},{\"id\":\"G6\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":3,\"y\":4,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]}],\"input\":null,\"thousandsSeparator\":null,\"cursor\":{\"x\":1,\"y\":5}},\"inline\":false,\"solution\":[{\"id\":\"G23\",\"type\":\"SYMBOL\",\"c\":\"1\",\"x\":0,\"y\":0,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G22\",\"type\":\"SYMBOL\",\"c\":\"1\",\"x\":1,\"y\":0,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G21\",\"type\":\"SYMBOL\",\"c\":\"0\",\"x\":2,\"y\":0,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G20\",\"type\":\"SYMBOL\",\"c\":\"2\",\"x\":3,\"y\":0,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G19\",\"type\":\"SYMBOL\",\"c\":\"+\",\"x\":0,\"y\":1,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G16\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":1,\"y\":1,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G17\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":2,\"y\":1,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G18\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":3,\"y\":1,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G15\",\"type\":\"SYMBOL\",\"c\":\"7\",\"x\":1,\"y\":2,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G14\",\"type\":\"SYMBOL\",\"c\":\"6\",\"x\":2,\"y\":2,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G13\",\"type\":\"SYMBOL\",\"c\":\"0\",\"x\":3,\"y\":2,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G12\",\"type\":\"SYMBOL\",\"c\":\"3\",\"x\":1,\"y\":3,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G10\",\"type\":\"SYMBOL\",\"c\":\"4\",\"x\":2,\"y\":3,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G8\",\"type\":\"SYMBOL\",\"c\":\"2\",\"x\":3,\"y\":3,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G4\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":1,\"y\":4,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]},{\"id\":\"G5\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":2,\"y\":4,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]},{\"id\":\"G6\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":3,\"y\":4,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]},{\"id\":\"G7\",\"type\":\"SYMBOL\",\"c\":\"*\",\"x\":1,\"y\":5,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G2\",\"type\":\"SYMBOL\",\"c\":\"2\",\"x\":2,\"y\":5,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G3\",\"type\":\"SYMBOL\",\"c\":\"9\",\"x\":3,\"y\":5,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G0\",\"type\":\"SYMBOL\",\"c\":\"3\",\"x\":2,\"y\":6,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G1\",\"type\":\"SYMBOL\",\"c\":\"8\",\"x\":3,\"y\":6,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G11\",\"type\":\"OVERFLOW\",\"c\":\"3\",\"x\":1,\"y\":7,\"clist\":null,\"tags\":[\"GENERATED\"]},{\"id\":\"G9\",\"type\":\"OVERFLOW\",\"c\":\"7\",\"x\":2,\"y\":7,\"clist\":null,\"tags\":[\"GENERATED\"]}],\"i18n\":[\"uk\",\"en\"],\"numeralSystem\":\"ARABIC_DECIMALPOINT\",\"extendedInline\":false,\"interactionOptions\":{},\"enableCalculator\":false,\"scored\":true,\"marksTotal\":1}],\"resources\":[]}],\"assessmentMode\":false,\"questionMode\":\"ONE_BY_ONE\"},\"solution\":true}</script></engine-exercise>",
+  "data": {
+    "view": {
+      "i18n": [
+        "uk",
+        "en"
+      ],
+      "showHints": true,
+      "numeralSystem": "ARABIC_DECIMALPOINT",
+      "elements": [
+        {
+          "id": "Q1",
+          "type": "QUESTION",
+          "instructionType": "SCRIPT",
+          "content": [
+            {
+              "mimeType": "text/plain",
+              "content": "<div data-ref-id=\"ZxmHv\" data-ref-name=\"Block 1\">Calculate "
+            },
+            {
+              "mimeType": "application/x-tex",
+              "content": "$38$",
+              "engine": "FormattedNumber[38, 0, 0]"
+            },
+            {
+              "mimeType": "text/plain",
+              "content": " times "
+            },
+            {
+              "mimeType": "application/x-tex",
+              "content": "$29$",
+              "engine": "FormattedNumber[29, 0, 0]"
+            },
+            {
+              "mimeType": "text/plain",
+              "content": ".</div><p><engine-interaction ref-id=\"K0HwQ\" ref-name=\"I1\"></engine-interaction></p>"
+            }
+          ],
+          "interactions": [
+            {
+              "id": "K0HwQ",
+              "ans": {
+                "id": "$$\\verb|solution|$$",
+                "type": "ARITHMETIC",
+                "i18n": [
+                  "en"
+                ],
+                "width": 4,
+                "height": 8,
+                "attributeMap": {
+                  "areaMap": {
+                    "product": {
+                      "id": "product",
+                      "left": 0,
+                      "bottom": 7,
+                      "width": 4,
+                      "type": "OVERFLOW",
+                      "multilevel": true
+                    },
+                    "rtl_line_0": {
+                      "id": "rtl_line_0",
+                      "left": 3,
+                      "bottom": 3,
+                      "width": 1,
+                      "type": "RIGHT_TO_LEFT"
+                    },
+                    "rtl_line_1": {
+                      "id": "rtl_line_1",
+                      "left": 3,
+                      "bottom": 2,
+                      "width": 1,
+                      "type": "RIGHT_TO_LEFT"
+                    },
+                    "answer-line": {
+                      "id": "answer-line",
+                      "left": 0,
+                      "bottom": 1,
+                      "width": 4,
+                      "type": "LINE"
+                    },
+                    "rtl_answer": {
+                      "id": "rtl_answer",
+                      "left": 3,
+                      "bottom": 0,
+                      "width": 1,
+                      "type": "RIGHT_TO_LEFT"
+                    }
+                  }
+                },
+                "tokens": [
+                  {
+                    "id": "G4",
+                    "type": "SYMBOL",
+                    "c": "_",
+                    "x": 1,
+                    "y": 4,
+                    "clist": null,
+                    "tags": [
+                      "FIXED",
+                      "GENERATED"
+                    ]
+                  },
+                  {
+                    "id": "G5",
+                    "type": "SYMBOL",
+                    "c": "_",
+                    "x": 2,
+                    "y": 4,
+                    "clist": null,
+                    "tags": [
+                      "FIXED",
+                      "GENERATED"
+                    ]
+                  },
+                  {
+                    "id": "G6",
+                    "type": "SYMBOL",
+                    "c": "_",
+                    "x": 3,
+                    "y": 4,
+                    "clist": null,
+                    "tags": [
+                      "FIXED",
+                      "GENERATED"
+                    ]
+                  }
+                ],
+                "input": null,
+                "thousandsSeparator": null,
+                "cursor": {
+                  "x": 1,
+                  "y": 5
+                }
+              },
+              "inline": false,
+              "solution": [
+                {
+                  "id": "G23",
+                  "type": "SYMBOL",
+                  "c": "1",
+                  "x": 0,
+                  "y": 0,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G22",
+                  "type": "SYMBOL",
+                  "c": "1",
+                  "x": 1,
+                  "y": 0,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G21",
+                  "type": "SYMBOL",
+                  "c": "0",
+                  "x": 2,
+                  "y": 0,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G20",
+                  "type": "SYMBOL",
+                  "c": "2",
+                  "x": 3,
+                  "y": 0,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G19",
+                  "type": "SYMBOL",
+                  "c": "+",
+                  "x": 0,
+                  "y": 1,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G16",
+                  "type": "SYMBOL",
+                  "c": "_",
+                  "x": 1,
+                  "y": 1,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G17",
+                  "type": "SYMBOL",
+                  "c": "_",
+                  "x": 2,
+                  "y": 1,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G18",
+                  "type": "SYMBOL",
+                  "c": "_",
+                  "x": 3,
+                  "y": 1,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G15",
+                  "type": "SYMBOL",
+                  "c": "7",
+                  "x": 1,
+                  "y": 2,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G14",
+                  "type": "SYMBOL",
+                  "c": "6",
+                  "x": 2,
+                  "y": 2,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G13",
+                  "type": "SYMBOL",
+                  "c": "0",
+                  "x": 3,
+                  "y": 2,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G12",
+                  "type": "SYMBOL",
+                  "c": "3",
+                  "x": 1,
+                  "y": 3,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G10",
+                  "type": "SYMBOL",
+                  "c": "4",
+                  "x": 2,
+                  "y": 3,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G8",
+                  "type": "SYMBOL",
+                  "c": "2",
+                  "x": 3,
+                  "y": 3,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G4",
+                  "type": "SYMBOL",
+                  "c": "_",
+                  "x": 1,
+                  "y": 4,
+                  "clist": null,
+                  "tags": [
+                    "FIXED",
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G5",
+                  "type": "SYMBOL",
+                  "c": "_",
+                  "x": 2,
+                  "y": 4,
+                  "clist": null,
+                  "tags": [
+                    "FIXED",
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G6",
+                  "type": "SYMBOL",
+                  "c": "_",
+                  "x": 3,
+                  "y": 4,
+                  "clist": null,
+                  "tags": [
+                    "FIXED",
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G7",
+                  "type": "SYMBOL",
+                  "c": "*",
+                  "x": 1,
+                  "y": 5,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G2",
+                  "type": "SYMBOL",
+                  "c": "2",
+                  "x": 2,
+                  "y": 5,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G3",
+                  "type": "SYMBOL",
+                  "c": "9",
+                  "x": 3,
+                  "y": 5,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G0",
+                  "type": "SYMBOL",
+                  "c": "3",
+                  "x": 2,
+                  "y": 6,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G1",
+                  "type": "SYMBOL",
+                  "c": "8",
+                  "x": 3,
+                  "y": 6,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G11",
+                  "type": "OVERFLOW",
+                  "c": "3",
+                  "x": 1,
+                  "y": 7,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                },
+                {
+                  "id": "G9",
+                  "type": "OVERFLOW",
+                  "c": "7",
+                  "x": 2,
+                  "y": 7,
+                  "clist": null,
+                  "tags": [
+                    "GENERATED"
+                  ]
+                }
+              ],
+              "i18n": [
+                "uk",
+                "en"
+              ],
+              "numeralSystem": "ARABIC_DECIMALPOINT",
+              "extendedInline": false,
+              "interactionOptions": {},
+              "enableCalculator": false,
+              "scored": true,
+              "marksTotal": 1
+            }
+          ],
+          "resources": []
+        }
+      ],
+      "assessmentMode": false,
+      "questionMode": "ONE_BY_ONE"
+    }
+  },
+  "sessionId": "5fd026d3-0f78-448c-b679-aacb6bee3cde",
+  "appId": "demo.exercise-app",
+  "solution": true,
+  "success": true
+}

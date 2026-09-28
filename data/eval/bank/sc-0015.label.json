@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0015",
+  "equation_kind": "subtraction",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0018",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {
+      "flattened": "main_9",
+      "bbox_px": [
+        203.29843139648438,
+        152.60671997070312,
+        241.41494750976562,
+        215.33004760742188
+      ]
+    },
+    {
+      "flattened": "main_1",
+      "bbox_px": [
+        164.06649780273438,
+        169.43270874023438,
+        195.01828002929688,
+        212.35342407226562
+      ]
+    },
+    {
+      "flattened": "main_2",
+      "bbox_px": [
+        248.44256591796875,
+        142.02471923828125,
+        297.78045654296875,
+        217.04827880859375
+      ]
+    },
+    {
+      "flattened": "main_0",
+      "bbox_px": [
+        101.76434326171875,
+        227.61956787109375,
+        151.94064331054688,
+        277.505126953125
+      ]
+    },
+    {
+      "flattened": "main_9",
+      "bbox_px": [
+        165.193115234375,
+        230.98716735839844,
+        205.98382568359375,
+        284.6517333984375
+      ]
+    },
+    {
+      "flattened": "main_8",
+      "bbox_px": [
+        212.3144989013672,
+        236.39010620117188,
+        244.67237854003906,
+        286.9676818847656
+      ]
+    },
+    {
+      "flattened": "op_minus",
+      "bbox_px": [
+        255.93292236328125,
+        227.97523498535156,
+        300.72174072265625,
+        298.305419921875
+      ]
+    },
+    {
+      "flattened": "result_bar",
+      "bbox_px": [
+        46.93878173828125,
+        304.4692687988281,
+        359.89532470703125,
+        336.5862731933594
+      ]
+    },
+    {
+      "flattened": "op_minus",
+      "bbox_px": [
+        0.0,
+        0.0,
+        0.1,
+        0.1
+      ]
+    }
+  ],
+  "intended_text": "192-098=",
+  "notes": "kind mis-classified as divide; minus signs both undetected/mislabelled",
+  "has_unlocated_missed": true,
+  "n_missed_unlocated": 1
+}

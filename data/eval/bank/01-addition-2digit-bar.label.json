@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "sample": "01-addition-2digit-bar",
+  "equation_kind": "addition",
+  "symbols": [
+    {"flattened": "main_4", "bbox_px": [224, 84, 294, 153]},
+    {"flattened": "main_4", "bbox_px": [314, 83, 370, 169]},
+    {"flattened": "op_plus", "bbox_px": [98, 198, 208, 253]},
+    {"flattened": "main_5", "bbox_px": [292, 195, 392, 258]},
+    {"flattened": "result_bar", "bbox_px": [131, 263, 449, 293]},
+    {"flattened": "main_5", "bbox_px": [222, 310, 299, 369]},
+    {"flattened": "main_9", "bbox_px": [294, 310, 353, 373]}
+  ],
+  "intended_text": "44 + 5 = 59 (incorrect math; annotation reflects drawn symbols)",
+  "notes": "Manual annotation: 2-digit addition with bar. Top row 44 (2 digits, both 4), middle +5, result_bar, bottom 59. Math is incorrect (44+5=49, drawn answer is 59) but annotations reflect what is drawn. Pipeline seed had wrong labels and missed result row. Bboxes from connected-component analysis on preprocessed 512x512.",
+  "pending_manual_review": false
+}

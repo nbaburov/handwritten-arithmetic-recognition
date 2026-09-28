@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "sample": "05-addition-partial-no-result",
+  "equation_kind": "addition",
+  "symbols": [
+    {"flattened": "main_1", "bbox_px": [242, 99, 278, 169]},
+    {"flattened": "main_7", "bbox_px": [299, 107, 378, 173]},
+    {"flattened": "op_plus", "bbox_px": [86, 223, 224, 280]},
+    {"flattened": "main_6", "bbox_px": [317, 197, 356, 268]},
+    {"flattened": "result_bar", "bbox_px": [205, 288, 432, 302]}
+  ],
+  "intended_text": "17 + 6 = (partial, no result)",
+  "notes": "Manual annotation: partial addition equation. Top 17, middle +6, bottom result_bar with NO result digits drawn (partial/incomplete state). 5 symbols. Bboxes from connected-component analysis on preprocessed 512x512.",
+  "pending_manual_review": false
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "sample": "04-division-short-bracket",
+  "equation_kind": "division",
+  "symbols": [
+    {"flattened": "main_1", "bbox_px": [213, 78, 237, 117]},
+    {"flattened": "main_2", "bbox_px": [240, 79, 278, 108]},
+    {"flattened": "main_5", "bbox_px": [289, 77, 346, 111]},
+    {"flattened": "div_bracket", "bbox_px": [122, 118, 381, 373]},
+    {"flattened": "main_5", "bbox_px": [60, 132, 124, 168]},
+    {"flattened": "main_2", "bbox_px": [239, 147, 273, 188]},
+    {"flattened": "main_5", "bbox_px": [283, 146, 344, 191]},
+    {"flattened": "result_bar", "bbox_px": [211, 206, 389, 214]},
+    {"flattened": "op_plus", "bbox_px": [171, 246, 238, 301]},
+    {"flattened": "main_3", "bbox_px": [284, 247, 308, 289]},
+    {"flattened": "main_4", "bbox_px": [317, 244, 352, 301]}
+  ],
+  "intended_text": "5)125, 25, +34 (short division with student work)",
+  "notes": "Manual annotation: short division. Divisor=5 (left). div_bracket = L-shape enclosing dividend. Top row 125 = dividend (or quotient depending on convention). Middle 25 = student work. Result_bar below. Bottom +34 = student remainder/work step. Bboxes from connected-component analysis on preprocessed 512x512.",
+  "pending_manual_review": false
+}

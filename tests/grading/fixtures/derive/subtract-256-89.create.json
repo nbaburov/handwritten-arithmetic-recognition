@@ -1,0 +1,22 @@
+[
+  {
+    "success": true,
+    "sessions": [
+      {
+        "success": true,
+        "sessionId": "01670e42-760e-487b-b2c3-a4e6b7630d1f",
+        "type": "SINGLE",
+        "solution": false,
+        "marksTotal": 1,
+        "interactions": {
+          "drYEz": {
+            "type": "ARITHMETIC",
+            "marks": 1,
+            "scorable": true
+          }
+        },
+        "html": "<engine-exercise session-id=\"01670e42-760e-487b-b2c3-a4e6b7630d1f\" app-id=\"demo.exercise-app\" engine-init=\"inline\" ><script type=\"grading/init-data\">{\"events\":{\"_main\":[{\"name\":\"createQuestion\",\"timestamp\":1781993915090,\"in\":{\"id\":\"Q1\"},\"out\":{\"newQuestionId\":\"Q1\",\"interactions\":[{\"refId\":\"drYEz\"}]}}],\"drYEz\":[]},\"view\":{\"i18n\":[\"en\"],\"showHints\":true,\"numeralSystem\":\"ARABIC_DECIMALPOINT\",\"elements\":[{\"id\":\"Q1\",\"type\":\"QUESTION\",\"instructionType\":\"SCRIPT\",\"content\":[{\"mimeType\":\"text/plain\",\"content\":\"<div data-ref-id=\\\"PTv4p\\\" data-ref-name=\\\"Block 1\\\">Calculate 256 - 89.<br><br></div><p><engine-interaction ref-id=\\\"drYEz\\\" ref-name=\\\"I1\\\"></engine-interaction></p><div data-ref-id=\\\"lYmrv\\\" data-ref-name=\\\"Block 2\\\">  <br></div>\"}],\"interactions\":[{\"id\":\"drYEz\",\"ans\":{\"id\":\"ANS\",\"type\":\"ARITHMETIC\",\"i18n\":[\"en\"],\"width\":13,\"height\":10,\"attributeMap\":{\"areaMap\":{\"subtract\":{\"id\":\"subtract\",\"left\":9,\"bottom\":7,\"width\":4,\"type\":\"REPLACE\"},\"htu\":{\"id\":\"htu\",\"left\":10,\"bottom\":9,\"width\":3,\"type\":\"PLACE_VALUE\",\"attributes\":{\"decimals\":\"0\"}},\"answer-line\":{\"id\":\"answer-line\",\"left\":10,\"bottom\":0,\"width\":3,\"type\":\"LINE\"},\"rtl\":{\"id\":\"rtl\",\"left\":12,\"bottom\":3,\"width\":1,\"type\":\"RIGHT_TO_LEFT\"},\"autoshow_0\":{\"id\":\"autoshow_0\",\"left\":0,\"bottom\":3,\"width\":10,\"type\":\"AUTOSHOW\"},\"autoshow_2\":{\"id\":\"autoshow_2\",\"left\":0,\"bottom\":1,\"width\":10,\"type\":\"AUTOSHOW\"},\"autoshow_1\":{\"id\":\"autoshow_1\",\"left\":0,\"bottom\":2,\"width\":10,\"type\":\"AUTOSHOW\"}}},\"tokens\":[{\"id\":\"G30\",\"type\":\"SYMBOL\",\"c\":\"-\",\"x\":5,\"y\":1,\"clist\":null,\"tags\":[\"AUTOSHOW\",\"GENERATED\"]},{\"id\":\"G28\",\"type\":\"SYMBOL\",\"c\":\"=\",\"x\":9,\"y\":1,\"clist\":null,\"tags\":[\"AUTOSHOW\",\"GENERATED\"]},{\"id\":\"G22\",\"type\":\"SYMBOL\",\"c\":\"-\",\"x\":5,\"y\":2,\"clist\":null,\"tags\":[\"AUTOSHOW\",\"GENERATED\"]},{\"id\":\"G19\",\"type\":\"SYMBOL\",\"c\":\"=\",\"x\":9,\"y\":2,\"clist\":null,\"tags\":[\"AUTOSHOW\",\"GENERATED\"]},{\"id\":\"G12\",\"type\":\"SYMBOL\",\"c\":\"-\",\"x\":5,\"y\":3,\"clist\":null,\"tags\":[\"AUTOSHOW\",\"GENERATED\"]},{\"id\":\"G10\",\"type\":\"SYMBOL\",\"c\":\"=\",\"x\":9,\"y\":3,\"clist\":null,\"tags\":[\"AUTOSHOW\",\"GENERATED\"]},{\"id\":\"G5\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":9,\"y\":4,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]},{\"id\":\"G6\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":10,\"y\":4,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]},{\"id\":\"G7\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":11,\"y\":4,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]},{\"id\":\"G8\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":12,\"y\":4,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]},{\"id\":\"G9\",\"type\":\"SYMBOL\",\"c\":\"-\",\"x\":9,\"y\":5,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]},{\"id\":\"G0\",\"type\":\"SYMBOL\",\"c\":\"2\",\"x\":10,\"y\":6,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]},{\"id\":\"G1\",\"type\":\"SYMBOL\",\"c\":\"5\",\"x\":11,\"y\":6,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]},{\"id\":\"G2\",\"type\":\"SYMBOL\",\"c\":\"6\",\"x\":12,\"y\":6,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]}],\"input\":null,\"thousandsSeparator\":\"NONE\",\"cursor\":{\"x\":11,\"y\":5}},\"inline\":false,\"solution\":null,\"i18n\":[\"en\"],\"numeralSystem\":\"ARABIC_DECIMALPOINT\",\"extendedInline\":false,\"interactionOptions\":{\"extendedInline\":false,\"addVariablesToPalette\":\"mobile-only\"},\"enableCalculator\":false,\"scored\":true,\"marksTotal\":1}],\"resources\":[]}],\"assessmentMode\":false,\"questionMode\":\"ONE_BY_ONE\"},\"attributes\":{}}</script></engine-exercise>"
+      }
+    ]
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0029",
+  "equation_kind": "addition",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0034",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {"flattened": "main_1", "bbox_px": [93, 76, 100, 156]},
+    {"flattened": "main_4", "bbox_px": [135, 83, 182, 164]},
+    {"flattened": "main_6", "bbox_px": [193, 76, 236, 147]},
+    {"flattened": "main_2", "bbox_px": [69, 188, 123, 252]},
+    {"flattened": "main_3", "bbox_px": [123, 188, 178, 252]},
+    {"flattened": "main_5", "bbox_px": [205, 192, 249, 250]},
+    {"flattened": "op_plus", "bbox_px": [283, 219, 329, 257]},
+    {"flattened": "result_bar", "bbox_px": [81, 263, 301, 275]}
+  ],
+  "intended_text": "146 + 235 = (partial, no result; trailing +)",
+  "notes": "Audit fix (2026-05-21): 8 symbols. Top 146, middle 235 with trailing +, bar. Previous labels missed main_4. 2 and 3 merged in CC; split heuristically."
+}

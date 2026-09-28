@@ -1,0 +1,416 @@
+/*
+ * set-maker annotator styles (WS-H).
+ *
+ * Forced dark, matching the existing inference GUI palette so the two tools feel
+ * like one product. Colour tokens mirror src/inference/palette.py and the --engine-*
+ * names used in src/inference/static/gui.css (here they are concrete values, not
+ * Gradio theme delegates, because this app is standalone with no Gradio chrome).
+ *
+ * The canvas is a fixed 512x512 square: that is exactly the preprocessed image
+ * space the backend works in, so every box coordinate the user edits is already
+ * in the 512 px frame the exporter and the model expect. No scaling maths leaks
+ * into the coordinate contract.
+ */
+
+:root {
+  --sm-bg:            #0d1117;
+  --sm-bg-card:       #161b22;
+  --sm-bg-secondary:  #11161d;
+  --sm-border:        #2d333b;
+  --sm-text:          #f0f3f6;
+  --sm-text-sub:      #9aa4b0;
+  --sm-accent:        #3996ff;  /* digit_main blue — primary action accent */
+  --sm-accent-2:      #56d364;  /* save / success green */
+  --sm-flag:          #ed7118;  /* palette.LOW_CONF_COLOUR — flagged boxes */
+  --sm-box:           #3996ff;  /* normal box stroke */
+  --sm-box-selected:  #e3b341;  /* selected box stroke (amber) */
+  --sm-warn:          #f59e0b;
+  --sm-err:           #ef4444;
+  --sm-canvas:        #ffffff;  /* the human draws dark strokes on white */
+  --sm-radius:        8px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--sm-bg);
+  color: var(--sm-text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+kbd {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  background: var(--sm-bg-secondary);
+  border: 1px solid var(--sm-border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--sm-text);
+}
+
+/* ---------------------------------------------------------------- top bar */
+
+.sm-topbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 10px 18px;
+  background: var(--sm-bg-card);
+  border-bottom: 1px solid var(--sm-border);
+}
+
+.sm-brand { display: flex; flex-direction: column; line-height: 1.15; }
+.sm-brand-name { font-weight: 700; font-size: 16px; letter-spacing: 0.2px; }
+.sm-brand-sub { font-size: 11px; color: var(--sm-text-sub); }
+
+.sm-mode { display: flex; align-items: center; gap: 8px; }
+
+.sm-mode-btn,
+.sm-mode-start,
+.sm-btn {
+  font: inherit;
+  cursor: pointer;
+  border-radius: var(--sm-radius);
+  border: 1px solid var(--sm-border);
+  background: var(--sm-bg-secondary);
+  color: var(--sm-text);
+  padding: 6px 14px;
+  transition: background 120ms ease, border-color 120ms ease, opacity 120ms ease;
+}
+.sm-mode-btn:hover,
+.sm-btn:hover:not(:disabled) { border-color: var(--sm-accent); }
+
+.sm-mode-btn[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--sm-accent) 26%, var(--sm-bg-secondary));
+  border-color: var(--sm-accent);
+  color: #fff;
+}
+
+.sm-mode-start { background: var(--sm-accent); border-color: var(--sm-accent); color: #fff; }
+.sm-mode-start:disabled,
+.sm-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.sm-budget { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--sm-text-sub); }
+.sm-budget-input {
+  width: 64px; font: inherit; padding: 4px 6px;
+  background: var(--sm-bg-secondary); color: var(--sm-text);
+  border: 1px solid var(--sm-border); border-radius: 6px;
+}
+
+.sm-progress { display: flex; align-items: center; gap: 10px; margin-left: auto; min-width: 240px; }
+.sm-progress-bar {
+  flex: 1; height: 8px; border-radius: 99px;
+  background: var(--sm-bg-secondary); border: 1px solid var(--sm-border); overflow: hidden;
+}
+.sm-progress-fill { height: 100%; width: 0%; background: var(--sm-accent-2); transition: width 200ms ease; }
+.sm-progress-text { font-size: 12px; color: var(--sm-text-sub); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------------- banner */
+
+.sm-banner {
+  padding: 8px 18px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--sm-border);
+  background: var(--sm-bg-secondary);
+}
+.sm-banner[data-kind="warn"]   { color: #ffd591; background: color-mix(in srgb, var(--sm-warn) 16%, var(--sm-bg-secondary)); }
+.sm-banner[data-kind="error"]  { color: #ffb4ac; background: color-mix(in srgb, var(--sm-err)  18%, var(--sm-bg-secondary)); }
+.sm-banner[data-kind="notice"] { color: var(--sm-text-sub); }
+.sm-banner[data-kind="ok"]     { color: #b9f6c5; background: color-mix(in srgb, var(--sm-accent-2) 14%, var(--sm-bg-secondary)); }
+
+/* ---------------------------------------------------------------- layout */
+
+.sm-main {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 18px;
+  padding: 18px;
+  align-items: start;
+}
+
+.sm-rail { display: flex; flex-direction: column; gap: 14px; }
+
+.sm-card {
+  background: var(--sm-bg-card);
+  border: 1px solid var(--sm-border);
+  border-radius: var(--sm-radius);
+  overflow: hidden;
+}
+.sm-card-title {
+  margin: 0; padding: 9px 14px;
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px;
+  color: var(--sm-text-sub);
+  border-bottom: 1px solid var(--sm-border);
+}
+.sm-card-body { padding: 14px; }
+.sm-empty { color: var(--sm-text-sub); font-style: italic; margin: 0; }
+
+/* ---------------------------------------------------- B3 help panel + hints */
+/* Collapsible "How to label" card. Closed by default so it stays unobtrusive,
+   but the summary row makes it discoverable. Mode-sensitive sub-blocks inside
+   are toggled by app.js via [hidden]. */
+.sm-card--help-panel { display: block; }
+.sm-card--help-panel > .sm-help-body { padding: 0 14px 14px; }
+
+.sm-help-summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 14px;
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px;
+  color: var(--sm-text-sub);
+  border-bottom: 1px solid transparent;
+  user-select: none;
+}
+.sm-help-summary::-webkit-details-marker { display: none; }
+.sm-card--help-panel[open] > .sm-help-summary { border-bottom-color: var(--sm-border); }
+.sm-help-summary:hover { color: var(--sm-text); }
+.sm-help-summary-title::before { content: "?"; margin-right: 7px; color: var(--sm-accent); }
+.sm-help-summary-hint { font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 11px; opacity: 0.75; }
+
+.sm-help-lead {
+  margin: 12px 0 0;
+  font-size: 12px; line-height: 1.5; color: var(--sm-text);
+}
+.sm-help-section { margin-top: 14px; }
+.sm-help-h {
+  margin: 0 0 4px;
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--sm-accent);
+}
+.sm-help-section + .sm-help-section { border-top: 1px solid var(--sm-border); padding-top: 12px; }
+.sm-help-body p { margin: 0 0 8px; font-size: 12px; line-height: 1.5; color: var(--sm-text-sub); }
+.sm-help-body p:last-child { margin-bottom: 0; }
+.sm-help-h + p { color: var(--sm-text-sub); }
+
+/* Inline field hint: a small muted line directly under an inspector input or the
+   error-kind dropdown. Indented to align past the field label gutter. */
+.sm-field-hint {
+  margin: -2px 0 8px;
+  font-size: 11px; line-height: 1.4; color: var(--sm-text-sub);
+  opacity: 0.85;
+}
+.sm-field-hint--error { margin: 6px 0 0; }
+
+.sm-target-ref {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 22px;
+  line-height: 1.35;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--sm-text);
+  overflow-x: auto;
+}
+.sm-target-meta { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 14px 0 0; font-size: 12px; }
+.sm-target-meta dt { color: var(--sm-text-sub); }
+.sm-target-meta dd { margin: 0; color: var(--sm-text); font-variant-numeric: tabular-nums; }
+
+/* EVAL-only as-drawn error tag selector (hidden via [hidden] in train mode). */
+.sm-error-kind { display: flex; align-items: center; gap: 6px; margin: 14px 0 0; font-size: 12px; color: var(--sm-text-sub); }
+.sm-error-kind-select {
+  flex: 1; min-width: 0; padding: 4px 6px; font-size: 12px;
+  color: var(--sm-text); background: var(--sm-surface-2, #1b1f24);
+  border: 1px solid var(--sm-border, #2a2f36); border-radius: 6px;
+}
+
+/* -------------------------------------------------- 2-D target grid */
+/* Renders the target scene as a proper arithmetic layout so the annotator
+   can copy it at a glance.  Rows stack vertically; columns align
+   horizontally using a shared monospace cell width. */
+
+.tg-grid {
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--sm-text);
+}
+
+.tg-cell {
+  min-width: 36px;
+  padding: 2px 4px;
+  text-align: center;
+  vertical-align: bottom;
+}
+
+/* Empty spacer cell — preserves column alignment, invisible */
+.tg-cell--empty { opacity: 0; user-select: none; }
+
+/* Result bar: thin full-width horizontal rule */
+.tg-cell--bar { padding: 0; }
+.tg-bar {
+  display: block;
+  width: 100%;
+  height: 3px;
+  min-width: 44px;
+  border: none;
+  background: var(--sm-text);
+  margin: 4px 0;
+}
+
+/* Division bracket: vertical wall on the right edge (between divisor and
+   dividend); the overline over the dividend is drawn by .tg-cell--dividend. */
+.tg-cell--bracket {
+  min-width: 10px;
+  width: 10px;
+  padding: 2px 0;
+  border-right: 2px solid var(--sm-text);
+}
+/* Dividend cells sit under the vinculum (overline) of the division bracket. */
+.tg-cell--dividend { border-top: 2px solid var(--sm-text); }
+.tg-cell--dividend-first { border-top-left-radius: 7px; }
+
+/* Standalone division bracket (no dividend): self-contained glyph — left
+   vertical + overline stub joined at a rounded top-left corner. */
+.tg-cell--bracket-solo {
+  border-right: none;
+  border-left: 2px solid var(--sm-text);
+  border-top: 2px solid var(--sm-text);
+  border-top-left-radius: 7px;
+  min-width: 30px;
+  width: 30px;
+  height: 38px;
+}
+
+/* Superscript row: smaller, raised, tinted to distinguish from main digits */
+.tg-row--super .tg-cell,
+.tg-cell--super {
+  font-size: 13px;
+  vertical-align: bottom;
+  padding-bottom: 0;
+}
+
+/* Carry digit: accent blue */
+sup.tg-carry {
+  color: var(--sm-accent);
+  font-size: 13px;
+  font-weight: 600;
+  vertical-align: super;
+}
+
+/* Borrow digit: amber/orange to match flag colour */
+sup.tg-borrow {
+  color: var(--sm-flag);
+  font-size: 13px;
+  font-weight: 600;
+  vertical-align: super;
+}
+
+.sm-keys { display: flex; flex-direction: column; gap: 7px; font-size: 12px; color: var(--sm-text-sub); }
+.sm-keys > div { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+/* ------------------------------------------------------------- inspector */
+
+.sm-insp-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.sm-insp-glyph {
+  width: 40px; height: 40px; flex: none;
+  display: grid; place-items: center;
+  font-size: 24px; font-weight: 700;
+  background: var(--sm-bg-secondary); border: 1px solid var(--sm-border); border-radius: 6px;
+}
+.sm-insp-meta { font-size: 12px; color: var(--sm-text-sub); line-height: 1.4; }
+.sm-insp-meta strong { color: var(--sm-text); font-weight: 600; }
+
+.sm-field { display: flex; align-items: center; gap: 8px; margin: 8px 0; font-size: 12px; }
+.sm-field label { width: 96px; color: var(--sm-text-sub); }
+.sm-field input, .sm-field select {
+  flex: 1; font: inherit; padding: 4px 6px;
+  background: var(--sm-bg-secondary); color: var(--sm-text);
+  border: 1px solid var(--sm-border); border-radius: 6px;
+}
+.sm-field--flag label { width: auto; }
+
+.sm-insp-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+/* -------------------------------------------------------------- canvas */
+
+.sm-stage-wrap { display: flex; flex-direction: column; gap: 12px; }
+
+.sm-toolbar {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 10px 12px;
+  background: var(--sm-bg-card);
+  border: 1px solid var(--sm-border);
+  border-radius: var(--sm-radius);
+}
+.sm-spacer { flex: 1; }
+.sm-btn--primary { background: var(--sm-accent); border-color: var(--sm-accent); color: #fff; }
+.sm-btn--accent  { background: var(--sm-accent-2); border-color: var(--sm-accent-2); color: #06210f; font-weight: 600; }
+/* Eraser toggle active state — matches the armed-mode pill style so it reads as "on". */
+.sm-btn[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--sm-flag) 30%, var(--sm-bg-secondary));
+  border-color: var(--sm-flag);
+  color: #ffd9b8;
+}
+.sm-pen { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--sm-text-sub); }
+.sm-pen-size { width: 110px; }
+
+/* The stage host is exactly 512x512 so canvas pixels == bbox pixels. The chip
+   overlay sits on top of the same box, absolutely positioned, pointer-events
+   off except on the chip itself. */
+.sm-stage-host {
+  position: relative;
+  width: 512px;
+  height: 512px;
+  border: 1px solid var(--sm-border);
+  border-radius: var(--sm-radius);
+  overflow: hidden;
+  background: var(--sm-canvas);
+  /* The canvas owns all pointer gestures (draw + box edit); stop the browser
+     from hijacking stylus/touch for scroll or zoom. */
+  touch-action: none;
+}
+.sm-stage { width: 512px; height: 512px; }
+
+.sm-chip-layer {
+  position: absolute; inset: 0;
+  pointer-events: none;  /* chips re-enable it on themselves */
+}
+.sm-chip {
+  position: absolute;
+  transform: translate(0, -100%);
+  pointer-events: auto;
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px; font-weight: 600; line-height: 1;
+  padding: 2px 6px; border-radius: 5px;
+  background: #161b22ee; color: #fff;
+  border: 1px solid var(--chip, var(--sm-box));
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+.sm-chip[data-flagged="true"] { border-color: var(--sm-flag); color: #ffd9b8; }
+.sm-chip .sm-chip-src { opacity: 0.6; font-weight: 400; }
+.sm-chip .sm-chip-flag { color: var(--sm-flag); }
+
+/* Error-directive banner: full-width prominent strip above the canvas */
+.sm-error-directive-banner {
+  background: color-mix(in srgb, var(--sm-warn) 20%, var(--sm-bg-secondary));
+  color: #ffd591;
+  border-left: 4px solid var(--sm-warn);
+  padding: 10px 18px;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+/* Required marker for the error-kind label when directive=="error" */
+.sm-error-kind--required {
+  color: #ffd591;
+  font-weight: 600;
+}
+.sm-error-kind--required .sm-error-kind-select {
+  border-color: var(--sm-warn);
+  outline: 1px solid var(--sm-warn);
+}

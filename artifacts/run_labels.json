@@ -1,0 +1,13 @@
+{
+  "_comment": "Single source of truth for human run labels. The GUI model picker and docs/runs.md both read these. Keep labels paren-free (the picker parses parentheses). Update here when promoting or adding a run.",
+  "gnn": {
+    "20260525T224459Z_a7fd6e8f": "iter10-R6 GNN-B (local)",
+    "20260527T080712Z_14df2140": "iter10-R6 cloud · rollback",
+    "20260622T123233Z_7dfc6c79": "iter11 cloud crowding+CROHME-natural · ACTIVE"
+  },
+  "yolo": {
+    "20260507T171441Z_e1060a61": "iter7 (local baseline)",
+    "20260527T103315Z_aa990906": "iter10-R6 cloud · rollback",
+    "20260622T134925Z_fc69f9ef": "iter11 cloud crowding+CROHME-natural · ACTIVE"
+  }
+}

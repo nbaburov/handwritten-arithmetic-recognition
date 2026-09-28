@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0030",
+  "equation_kind": "addition",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0035",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {"flattened": "main_1", "bbox_px": [175, 84, 225, 177]},
+    {"flattened": "main_2", "bbox_px": [267, 83, 324, 158]},
+    {"flattened": "main_3", "bbox_px": [363, 75, 405, 158]},
+    {"flattened": "op_plus", "bbox_px": [35, 219, 121, 294]},
+    {"flattened": "main_4", "bbox_px": [256, 187, 326, 285]},
+    {"flattened": "main_5", "bbox_px": [356, 201, 432, 277]},
+    {"flattened": "result_bar", "bbox_px": [140, 326, 402, 336]},
+    {"flattened": "main_7", "bbox_px": [258, 357, 316, 439]},
+    {"flattened": "main_8", "bbox_px": [316, 348, 403, 430]}
+  ],
+  "intended_text": "123 + 45 = 78 (incorrect math; annotation reflects drawn)",
+  "notes": "Audit fix (2026-05-21): 9 symbols. Top 123, middle +45, bar, result 78. Previous label had wrong first result digit (8 instead of 7)."
+}

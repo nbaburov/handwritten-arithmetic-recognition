@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0026",
+  "equation_kind": "addition",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0031",
+    "orig_session": "ceaed7fa",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {
+      "flattened": "main_1",
+      "bbox_px": [
+        127.9658203125,
+        64.92790222167969,
+        224.82699584960938,
+        162.39303588867188
+      ]
+    },
+    {
+      "flattened": "main_2",
+      "bbox_px": [
+        221.2236328125,
+        70.27020263671875,
+        302.6661376953125,
+        150.76144409179688
+      ]
+    },
+    {
+      "flattened": "op_plus",
+      "bbox_px": [
+        35.46025848388672,
+        210.38818359375,
+        119.71613311767578,
+        294.1789245605469
+      ]
+    },
+    {
+      "flattened": "main_3",
+      "bbox_px": [
+        152.543701171875,
+        183.42132568359375,
+        240.18304443359375,
+        272.80914306640625
+      ]
+    },
+    {
+      "flattened": "main_9",
+      "bbox_px": [
+        228.56008911132812,
+        185.58877563476562,
+        303.4207458496094,
+        275.5581359863281
+      ]
+    }
+  ],
+  "intended_text": "+12 39",
+  "notes": "carry spurious; trailing 0 spurious; row-1 1 read as 7"
+}

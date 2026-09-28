@@ -1,0 +1,289 @@
+[generation]
+images_per_case = 1000            # iter10 R-6: dropped 1500→1000. Rare combo (done_20 × addition) gets 64 train scenes (>50 floor); common classes ~15K instances (well above diminishing returns ~5K). Saves 4-6h YOLO train. Promote to 1500 if R-6 floor missed.
+min_instances_per_label = 1000    # iter10 R-6: symmetric with images_per_case
+seed = 42
+split_train = 0.80
+split_val = 0.10
+split_test = 0.10
+topup_rounds = 8                  # 8 topup rounds to satisfy min_instances_per_label
+source_pool = "crohme"             # "auto" | "legacy" | "clean" | "hires" | "crohme"
+min_source_quality = 0.0          # 0=disable gate (use all crops, matches scout). Was 0.5 (biased pool toward bold strokes).
+
+[generation.completion]           # equation completeness mix; must sum to 1.0
+# iter10 W10-SYNTH-DIVERSITY: rebalanced full 0.50 -> 0.57 to match real-bank distribution
+# (children mostly write at or near completion). Partials scaled by 0.86 to preserve coverage.
+full     = 0.57
+done_80  = 0.13
+done_60  = 0.11
+done_40  = 0.11
+done_20  = 0.08
+
+[generation.scene]
+wrong_result_prob = 0.50
+missing_structural_prob = 0.02
+wrong_operator_prob = 0.0
+crowdness_prob = 0.45   # iter11: raised 0.20->0.45 so a real fraction of ALL scenes are cramped (dense whole-layout, not just dense carries/borrows)
+crowding_factor         = 0.66   # iter11: tightened 0.70->0.66; column pitch when crowded (only active when crowdness_prob fires)
+scene_rotation_min_deg = -3.0
+scene_rotation_max_deg = 3.0
+
+[generation.preset]
+glyph_rotation_min_deg = -5.0
+glyph_rotation_max_deg = 5.0
+glyph_jitter_min_px = 0
+glyph_jitter_max_px = 2
+glyph_broken_stroke_prob = 0.0     # disabled: implementation cuts horizontal bands which is not how real handwriting breaks (user 2026-05-25)
+
+[generation.case_weights]         # per-case multiplier on images_per_case (1.0 = balanced)
+# iter11 FINE-TUNE deficit profile (2026-06-22): weighted toward real-eval weak points
+# (run 20260614T151011) to patch iter10-R6, with light rehearsal of strong cases to avoid forgetting.
+# Weak cases bumped; strong cases (standalone, bare_digit_grid) kept low as rehearsal. The two new
+# crowded cases are first exposure for the model, so they carry full weight.
+addition = 1.5                    # operator misread (eq0.19): plus -> sub/mult/div
+subtraction = 1.5                 # operator misread (eq0.11): minus -> times
+multiplication-simple = 1.0       # eq0.71 ok; rehearsal
+multiplication-multi = 2.0        # row0.48/col0.55 weak; partial-product rows
+division-short = 2.0              # row0.77/col0.67, eq0.41 (divide->bare_digits)
+division-long = 2.5              # worst row/col (0.40/0.27)
+division-simple = 1.0             # mid; rehearsal
+addition_op_right = 1.0
+addition_no_bar = 1.0
+subtraction_op_right = 1.0
+subtraction_no_bar = 1.0
+multiplication_simple_op_right = 1.0
+multiplication_simple_no_bar = 0.5
+subtraction_heavy_borrow = 2.0    # hosts double-digit borrow; eq0.10
+addition_dense_carries = 2.0      # hosts double-digit carry; eq0.33
+addition_no_carries = 1.0
+subtraction_crowded_borrow = 1.0  # iter11 NEW: double-digit borrow + overflow forced on
+addition_crowded_carry = 1.0      # iter11 NEW: double-digit carry + overflow forced on
+bare_digits         = 0.75        # vertical single-col row clustering (0.33-0.5)
+bare_digit_grid     = 0.5         # eq0.90 strong; rehearsal
+standalone_bar      = 0.4         # eq1.0 strong; rehearsal
+standalone_bracket  = 0.4         # eq1.0 strong; rehearsal
+
+[generation.rendering]
+carry_borrow_scale_min  = 0.50
+carry_borrow_scale_max  = 0.70
+operator_scale_min      = 0.65    # iter10 R-B: range replaces scalar; operators sampled uniformly [0.65, 1.20]
+operator_scale_max      = 1.20
+glyph_stroke_target_px  = 2.0   # iter11 FINAL (2026-06-22, user pick): normalise per-glyph stroke to 2.0px. Measured real input is ~2.0px; raw CROHME is 2px but the scene UPSCALES crops to fill the canvas (bicubic-doubles to 4-6px), and contrast_normalise fattens any soft gradient. Normalising to 2px (after hard binarise) counteracts both -> clean uniform thin strokes (the "proven" iter9/iter10 approach the user ranked best vs natural-variance, which exposed ugly individual crops). 0=natural variance (rejected: looks worse); 2.5=iter9-R2 baseline.
+
+# iter11 stroke appearance (2026-06-22): glyph binarize threshold.
+#   >0 = HARD binarise at that threshold (DEFAULT). 120 keeps a crisp ~2px stroke core that survives
+#        the downstream contrast_normalise in preprocess. 165 (legacy) captured the BICUBIC halo and
+#        looked thick/blobby. Lower = thinner.
+#   0  = SOFT/grayscale mode: keeps the antialiasing gradient -- AVOID. The gradient gets DARKENED by
+#        preprocess contrast_normalise, fattening 2px strokes to ~6px in the final scene. (Diagnosed
+#        2026-06-22: a crop is 2px at scene size, but soft+contrast pushes gray edges below ink thresh.)
+# 165 is the iter9/iter10 proven value; the glyph_stroke_target_px normalise below resets final width to
+# 2px regardless, so this just needs to be a clean hard binarise that captures the stroke body.
+glyph_binarize_threshold  = 165
+
+# iter11 render scale (2026-06-22): cap canvas-fill scale so glyphs render near native crop size.
+# Real input glyphs are ~64px (40-85) with ~2px strokes; the old cap 5.5 blew sparse scenes up to
+# ~240px, bicubic-doubling strokes to 4-6px (uniformly thick). 2.5 keeps glyphs ~real size + ~2px with
+# natural CROHME per-glyph width variance (some bold, some thin = real handwriting) + real-like
+# whitespace. Lower = smaller/sparser; raise toward 5.5 = bigger/thicker (fills canvas).
+max_render_scale          = 5.5   # iter11 FINAL: reverted cap to legacy 5.5 (fill canvas). The glyph stroke normalise (2.0px) handles upscale-thickening, so the cap is not needed for stroke width; user ranked the full-size "proven" look best. Lower (e.g. 2.5) only if you want smaller/sparser glyphs.
+
+# iter11 crowding (2026-06-22): model real tight kid handwriting.
+glyph_overflow_prob       = 0.20  # per main/operand glyph: probability it overflows into a neighbour cell (H or V)
+glyph_overflow_scale_max  = 1.35  # max scale multiplier when overflow fires
+glyph_overflow_shift_frac = 0.30  # max centroid shift toward neighbour as fraction of pitch; MUST stay < 0.5 (centroid stays in intended cell -> geometric row/col GT holds)
+double_digit_cell_prob    = 0.30  # per borrow/carry token: probability it packs two glyphs in ONE cell (same row,col), e.g. "16"
+
+# Glyph post-process (after BICUBIC resize + binarize)
+glyph_morph_close_kernel = 0    # 0=disabled, 2=2x2, 3=3x3 (thickens glyphs)
+broken_stroke_band_frac = 0.125 # height of erased band as fraction of tile height (1/8)
+page_padding_min_px = 2         # minimum top/bottom canvas margin (pixels)
+page_padding_max_px = 10        # maximum top/bottom canvas margin (pixels)
+
+# Layout geometry (base_cell_px untouched)
+base_cell_px = 44
+gap_x_min    = 2
+gap_x_max    = 8
+gap_y_min    = 4
+gap_y_max    = 12
+
+# Result bar stroke character
+bar_gap_prob           = 0.02
+bar_thickness_min      = 2
+bar_thickness_max      = 3
+bar_intensity_min      = 0
+bar_intensity_max      = 0
+bar_micro_break_prob   = 0.05
+bar_y_jitter_sigma     = 2.0
+bar_x_jitter_sigma     = 1.5
+
+# Division bracket stroke character
+bracket_gap_prob           = 0.02
+bracket_thickness_min      = 2
+bracket_thickness_max      = 3
+bracket_intensity_min      = 0
+bracket_intensity_max      = 0
+bracket_micro_break_prob   = 0.05
+bracket_h_y_jitter_sigma   = 2.0
+bracket_h_x_jitter_sigma   = 1.0
+bracket_v_x_jitter_sigma   = 2.0
+
+# Subtraction borrow notation
+borrow_cross_prob      = 0.50
+
+# Long division per-step minus operator
+step_minus_prob        = 0.30
+
+# Carry notation errors
+wrong_carry_col_prob   = 0.10
+missing_carry_prob     = 0.20
+
+# Result bar length variance
+short_bar_prob         = 0.30
+short_bar_shrink_frac  = 0.20
+
+# Partial-product operator knobs (multiplication_multi)
+pp_plus_prob           = 0.30
+pp_wrong_operator_prob = 0.0
+
+# Variable bracket vertical arm depth (division)
+bracket_depth_full_prob  = 0.60
+bracket_depth_min_rows   = 2
+
+# Long-division step borrow tokens
+long_div_step_borrow_prob = 0.30
+
+# Helper operator at left of intermediate rows
+helper_operator_prob   = 0.15
+
+# Carry/borrow value errors
+wrong_carry_value_prob  = 0.50
+wrong_borrow_value_prob = 0.50
+missing_borrow_prob     = 0.20
+
+# Missing partial-product row (multiplication_multi only)
+missing_pp_prob        = 0.0
+
+[yolo]
+model = "yolov8n.pt"
+epochs = 50
+batch = 64
+image_size = 512
+patience = 10
+device = "cpu"
+workers = 8
+cache = "ram"
+rect = false
+optimizer = "SGD"
+lr0 = 0.01
+lrf = 0.01
+momentum = 0.937
+weight_decay = 0.0005
+warmup_epochs = 3.0
+box = 7.5
+cls = 0.5
+dfl = 1.5
+amp = false
+
+[yolo.augmentation]
+degrees = 3.0
+translate = 0.05
+scale = 0.3
+hsv_s = 0.05
+hsv_v = 0.25
+fliplr = 0.0
+flipud = 0.0
+mosaic = 0.0
+mixup = 0.0
+copy_paste = 0.0
+hsv_h = 0.0
+perspective = 0.0
+
+[yolo.inference]
+iou = 0.3
+agnostic_nms = false
+max_det = 80
+
+[gnn]
+epochs = 60
+batch_size = 32
+lr = 0.001
+dropout = 0.2
+weight_decay = 0.0001
+early_stop_patience = 8
+lr_patience = 5
+lr_factor = 0.5
+min_lr = 1e-6
+temperature = 0.1
+scene_dropout_prob = 0.15
+# W-ARCH-2: set to true to append a scene virtual node for eq_type head (default off)
+use_scene_virtual_node = true
+# W2-GNN-BBOX-JITTER: training-time bbox coordinate jitter in pixels (0.0 = disabled).
+# 2px = ~0.4% of the 512-px canvas; conservative magnitude that mimics real YOLO drift.
+# Val/test datasets always use clean synthetic coords regardless of this value.
+bbox_jitter_px = 2.0
+
+[gnn.loss_weights]
+fine_label = 2.0
+row_contrastive = 1.5
+row_ordinal = 1.0
+col_contrastive = 1.5
+col_ordinal = 1.0
+eq_type = 1.0
+edge_type = 0.3
+
+[parsing]
+# Recognize-as-drawn: equation_kind is the GNN eq_type head's recognized kind.
+# This knob NEVER mutates equation_kind. It only toggles whether the diagnostic
+# operator-disagreement observability fields (eq_kind_overridden_from /
+# eq_kind_override_reason) are computed. Default OFF.
+assembler_heuristic_enabled = false  # diagnostic-only; never relabels the kind
+
+
+[finetune]
+# Real+synthetic fine-tune dataset builder (`python -m src prepare-realtrain`).
+# real_oversample repeats each teammate-drawn real train row/triple this many
+# times in the MERGED train split (GNN manifest + YOLO train dir) so the small
+# real set raises gradient signal on the operator gap without drowning the
+# synthetic prior. Val/test stay pure synthetic. CLI --real-oversample overrides.
+real_oversample = 3
+
+[inference.cv_fusion]                 # classical-OpenCV detector fused into the inference path
+# YOLO misses symbols in unfinished scenes; this CV branch catches what YOLO did not claim.
+mode = "on"                # "on" (always fuse) | "auto" (skip when YOLO looks complete) | "off"
+flatten_background = false # true = flatten a dark photo surround to white before the whole pipeline (phone photos of paper)
+gate_min_detections = 6    # auto-mode only: YOLO looks "complete" at >= this many high-conf dets ...
+gate_mean_conf = 0.6       # ... and mean YOLO confidence >= this
+use_second_yolo_pass = false # false = classical CV detector on raw image (more robust); true = second YOLO pass on tight-masked image
+second_pass_conf = 0.15    # confidence threshold for second YOLO pass (lower than first-pass ~0.25)
+tight_mask_dilate_px = 4   # dilation (px) of tight mask before second YOLO pass
+classify_conf = 0.25       # min YOLO conf for a CV crop's reclassification to be trusted
+classify_with_yolo = true  # false = skip the crop YOLO pass entirely (CV boxes go to GNN with fallback_label)
+keep_unclassified = false  # drop CV boxes YOLO cannot classify; avoids phantom GNN nodes at the cost of some recall on isolated symbols
+keep_min_ink_frac = 0.10   # when keep_unclassified=true, retained boxes must have >=10% dark-pixel ink fraction (rejects speckle -> no phantom GNN nodes)
+fallback_label = "digit_main"  # coarse hint for kept-but-unclassified CV boxes
+unclassified_conf = 0.20   # confidence assigned to kept-but-unclassified CV boxes
+mask_yolo = true           # false = run OpenCV on the FULL image independently of YOLO; overlaps resolved by NMS (ties -> YOLO)
+cv_tight_mask = true       # true = mask only YOLO's actual ink pixels (carries inside loose bboxes survive); false = rectangle mask
+mask_dilate_px = 5         # dilation (px) of the YOLO-bbox RECTANGLE mask (only when cv_tight_mask=false)
+nms_iou = 0.3              # class-agnostic NMS IoU on the YOLO+CV union (ties prefer YOLO)
+letterbox_size = 512       # YOLO input size for the batched crop-classify pass
+# detect_symbols_cv knobs — FINE-GRAINED: merging disabled so OpenCV finds individual
+# symbols (not mega-blobs); low min_area/min_side to catch small missed carries.
+min_area = 30              # lower = catch tiny carries/dots (was 150)
+min_side = 4               # lower = catch thin strokes like "1" (was 10)
+pad = 4
+merge_overlap_ratio = 0.95 # near-1.0 = only merge near-complete overlaps (was 0.5)
+proximity_merge_factor = 0.0 # 0.0 = NO proximity merge → no mega-blobs gluing symbols (was 0.25)
+
+[grading]                          # grading-engine client for the demo app
+mode = "mock"                         # in-process grader; the only shipped mode
+audience = "uk_KS2"                   # curriculum selector for created exercises
+# Exercise UUIDs the demo offers. Each is derived at select time from its
+# captured create + solution fixtures; no hand-coded coordinates are needed.
+exercise_ids = [
+    "489d0c1a-147f-47bc-86cb-6d7c8a90fe15",   # subtract-256-89 (SUBTRACT_SHORT)
+    "29612ec7-5d46-4816-8443-0ef16ae61cef",   # product-38-29  (PRODUCT_SHORT)
+]
+
+[demo]                                        # demo app feature flags
+given_prior_enabled = true                    # ship OFF; promote after empirical eval shows positive delta

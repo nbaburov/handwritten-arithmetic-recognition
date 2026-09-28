@@ -1,0 +1,71 @@
+{
+  "run_id": "20260622T134925Z_fc69f9ef",
+  "stage": "yolo",
+  "run_type": "scratch",
+  "created_utc": "2026-06-22T14:13:00Z",
+  "git_revision": null,
+  "hyperparams": {
+    "model": "/workspace/har/artifacts/yolo/runs/20260527T103315Z_aa990906/best.pt",
+    "epochs": 50,
+    "image_size": 512,
+    "batch": 64,
+    "workers": 8,
+    "device": "0",
+    "cache": "ram",
+    "patience": 10,
+    "rect": false
+  },
+  "augmentation": {
+    "degrees": 3.0,
+    "translate": 0.05,
+    "scale": 0.3,
+    "hsv_s": 0.05,
+    "hsv_v": 0.25,
+    "fliplr": 0.0,
+    "flipud": 0.0,
+    "mosaic": 0.0,
+    "mixup": 0.0,
+    "copy_paste": 0.0,
+    "hsv_h": 0.0,
+    "perspective": 0.0
+  },
+  "metrics": {
+    "val": {
+      "mAP50": 0.9660019809483442,
+      "mAP50_95": 0.8150718914227064,
+      "per_class": {}
+    },
+    "test": {
+      "mAP50": 0.9648184071664739,
+      "mAP50_95": 0.8160964168246111,
+      "per_class": {
+        "digit_main": {
+          "ap50": 0.9811989069253653,
+          "ap50_95": 0.8098016207068508
+        },
+        "digit_carry": {
+          "ap50": 0.9553885332969556,
+          "ap50_95": 0.7565116953644031
+        },
+        "digit_borrow": {
+          "ap50": 0.8759219790602439,
+          "ap50_95": 0.6387067905426322
+        },
+        "operator": {
+          "ap50": 0.9864951877217939,
+          "ap50_95": 0.8467331474635962
+        },
+        "result_bar": {
+          "ap50": 0.9949058359944853,
+          "ap50_95": 0.8577323457478523
+        },
+        "divide_bracket": {
+          "ap50": 0.995,
+          "ap50_95": 0.9870929011223323
+        }
+      }
+    }
+  },
+  "ultralytics_weights": "/workspace/har/artifacts/yolo/runs/20260622T134925Z_fc69f9ef/yolo/weights/best.pt",
+  "best_pt": "/workspace/har/artifacts/yolo/runs/20260622T134925Z_fc69f9ef/best.pt"
+}

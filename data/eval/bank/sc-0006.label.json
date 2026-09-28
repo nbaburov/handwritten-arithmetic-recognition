@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0006",
+  "equation_kind": "addition",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0007",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {"flattened": "main_1", "bbox_px": [175, 133, 228, 223]},
+    {"flattened": "main_4", "bbox_px": [242, 145, 320, 218]},
+    {"flattened": "main_5", "bbox_px": [190, 257, 236, 330]},
+    {"flattened": "main_6", "bbox_px": [232, 259, 310, 321]},
+    {"flattened": "op_plus", "bbox_px": [106, 305, 177, 353]},
+    {"flattened": "result_bar", "bbox_px": [166, 359, 315, 374]},
+    {"flattened": "main_3", "bbox_px": [181, 378, 213, 442]},
+    {"flattened": "main_6", "bbox_px": [207, 391, 272, 452]}
+  ],
+  "intended_text": "14 + 56 = 36 (incorrect math; annotation reflects drawn symbols)",
+  "notes": "Audit fix (2026-05-21): rewrote bboxes from connected components. Middle row digits 5 and 6 (per user verification). 8 symbols."
+}

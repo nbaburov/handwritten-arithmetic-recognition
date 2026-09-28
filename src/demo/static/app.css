@@ -1,0 +1,1036 @@
+/*
+ * feedback demo styles, Direction A "Sunny classroom".
+ *
+ * Light is chosen for daylight legibility, to match the white draw canvas
+ * (no Mach-band glare), and to mirror the physical paper analogue children know.
+ *
+ * :root is the single source of truth for colour, radius, type scale, and motion.
+ * Konva shape values live in app.js as `const STYLE` (the canvas equivalent).
+ * Direction B "Space explorer" swaps six background/text variables; Direction C
+ * "Paper notebook" swaps background + radius. Both leave status and motion tokens
+ * untouched.
+ *
+ * The canvas is 512x512: exactly the preprocessed image space the backend works
+ * in, so every pixel_rect and glyph bbox is already in the correct frame.
+ */
+
+:root {
+  /* ---- layout backgrounds ---- */
+  --dk-bg:            #fffdf7;   /* page background — warm off-white */
+  --dk-bg-card:       #ffffff;   /* card / panel surface */
+  --dk-bg-secondary:  #f5f3ee;   /* muted section / input background */
+  --dk-border:        #ddd9d0;   /* default border — warm gray */
+  --dk-border-soft:   #eceae4;   /* subtler border */
+
+  /* ---- typography ---- */
+  --dk-text:          #1a1814;   /* near-black for max legibility */
+  --dk-text-sub:      #6b6560;   /* secondary / label text */
+  --dk-text-inv:      #ffffff;   /* text on coloured buttons */
+
+  /* ---- primary action (CTA) ---- */
+  --dk-accent:        #1d6ff0;   /* cobalt blue — Check button, links */
+  --dk-accent-hover:  #155ed4;
+  --dk-accent-2:      #22c55e;   /* green — success / correct */
+
+  /* ---- status colours (colour-blind-safe; always paired with shape/icon) ---- */
+  --dk-ok:            #16a34a;   /* green — OK / correct */
+  --dk-ok-bg:         #f0fdf4;
+  --dk-ok-border:     #bbf7d0;
+  --dk-missing:       #d97706;   /* amber — MISSING */
+  --dk-missing-bg:    #fffbeb;
+  --dk-missing-border:#fde68a;
+  --dk-error:         #dc2626;   /* red — ERROR */
+  --dk-error-bg:      #fef2f2;
+  --dk-error-border:  #fecaca;
+  --dk-hint:          #7c3aed;   /* purple — HINT */
+  --dk-hint-bg:       #f5f3ff;
+  --dk-hint-border:   #ddd6fe;
+
+  /* ---- canvas ---- */
+  --dk-canvas:        #ffffff;   /* draw canvas must be white */
+  --dk-grid-line:     rgba(0,0,0,0.13);   /* soft squared-paper guide — readable but not loud */
+  --dk-scaffold:      #1a1814;   /* pre-printed problem ink */
+
+  /* ---- radius / spacing / type ---- */
+  --dk-radius:        16px;      /* card radius */
+  --dk-radius-sm:     10px;      /* button / badge radius */
+  --dk-radius-pill:   99px;
+  --dk-shadow:        0 2px 12px rgba(0,0,0,0.07);
+  --dk-shadow-popup:  0 4px 20px rgba(0,0,0,0.12);
+
+  /* ---- type scale ---- */
+  --dk-font:          ui-rounded, "Nunito", "Varela Round", ui-sans-serif, system-ui, sans-serif;
+  --dk-font-mono:     ui-monospace, "SF Mono", Menlo, monospace;
+  --dk-fs-base:       16px;      /* body */
+  --dk-fs-sm:         13px;
+  --dk-fs-xs:         11px;
+  --dk-fs-lg:         20px;
+  --dk-fs-xl:         28px;      /* exercise prompt / check button */
+  --dk-fs-display:    36px;      /* large exercise number e.g. "256 − 89" */
+
+  /* ---- motion ---- */
+  --dk-dur-fast:      120ms;
+  --dk-dur-base:      220ms;
+  --dk-dur-celebrate: 380ms;
+  --dk-ease:          cubic-bezier(0.34, 1.56, 0.64, 1);   /* spring */
+  --dk-ease-out:      cubic-bezier(0.22, 1, 0.36, 1);
+  --dk-ease-linear:   linear;
+
+  /* ---- touch targets ---- */
+  --dk-btn-check-h:   52px;      /* Check button — proportionate, not edge-to-edge */
+  --dk-btn-min-h:     44px;      /* secondary buttons */
+  --dk-tool-btn-sz:   44px;      /* square tool buttons */
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--dk-bg);
+  color: var(--dk-text);
+  font-family: var(--dk-font);
+  font-size: var(--dk-fs-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================ motion keyframes */
+
+/* MISSING — slow amber pulse, 2 s, 3 iterations. */
+@keyframes dk-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+/* ERROR — two gentle nudges, not a harsh shake. */
+@keyframes dk-nudge {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(5px); }
+  50%  { transform: translateX(-5px); }
+  75%  { transform: translateX(3px); }
+  100% { transform: translateX(0); }
+}
+
+/* HINT — fade in and slide up 8 px. */
+@keyframes dk-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dk-spin { to { transform: rotate(360deg); } }
+
+/* ===================================================================== topbar */
+
+.dk-topbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 12px 24px;
+  background: var(--dk-bg-card);
+  border-bottom: 1px solid var(--dk-border);
+}
+
+.dk-brand { display: flex; flex-direction: column; line-height: 1.25; }
+.dk-brand-name { font-size: var(--dk-fs-lg); font-weight: 800; color: var(--dk-text); }
+.dk-brand-sub  { font-size: var(--dk-fs-sm); color: var(--dk-text-sub); margin-top: 1px; }
+
+/* Exercise picker: pill buttons, wrap on small screens. */
+.dk-picker {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+.dk-pill {
+  min-height: var(--dk-btn-min-h);
+  padding: 0 18px;
+  border: 1px solid var(--dk-border);
+  border-radius: var(--dk-radius-pill);
+  background: var(--dk-bg-secondary);
+  color: var(--dk-text);
+  font-family: var(--dk-font);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dk-dur-fast) var(--dk-ease-out),
+              color var(--dk-dur-fast) var(--dk-ease-out),
+              border-color var(--dk-dur-fast) var(--dk-ease-out);
+}
+.dk-pill:hover { border-color: var(--dk-accent); }
+.dk-pill[aria-pressed="true"] {
+  background: var(--dk-accent);
+  color: var(--dk-text-inv);
+  border-color: var(--dk-accent);
+}
+.dk-pill:disabled { opacity: 0.5; cursor: default; }
+
+/* ===================================================================== banner */
+
+.dk-banner {
+  margin: 12px 24px 0;
+  padding: 10px 16px;
+  border-radius: var(--dk-radius-sm);
+  font-size: var(--dk-fs-sm);
+  background: var(--dk-bg-secondary);
+  border: 1px solid var(--dk-border);
+  color: var(--dk-text-sub);
+}
+.dk-banner[data-kind="warn"]  { background: var(--dk-missing-bg); border-color: var(--dk-missing-border); color: var(--dk-missing); }
+.dk-banner[data-kind="error"] { background: var(--dk-error-bg);   border-color: var(--dk-error-border);   color: var(--dk-error); }
+
+/* ======================================================================= main */
+
+.dk-main {
+  display: grid;
+  /* Three equal columns: draw pad, feedback, dev diagnostics. */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: start;
+  padding: 20px 24px 32px;
+}
+
+/* ------------------------------------------------------------- left stage col */
+
+.dk-stage-col { display: flex; flex-direction: column; gap: 16px; }
+
+.dk-prompt {
+  font-size: var(--dk-fs-xl);
+  font-weight: 800;
+  color: var(--dk-text);
+  letter-spacing: 0.3px;
+  min-height: 1.3em;
+}
+
+/* position:relative so the HTML popup overlay (absolute) anchors to the same box as Konva. */
+.dk-stage-host {
+  position: relative;
+  width: 512px;
+  max-width: 100%;
+  height: 512px;
+  border-radius: var(--dk-radius);
+  overflow: hidden;
+  background: var(--dk-canvas);
+  border: 1.5px solid var(--dk-border);
+  box-shadow: var(--dk-shadow), inset 0 0 0 1px rgba(255,255,255,0.6);
+  touch-action: none;   /* let Konva own pointer gestures (stylus / finger) */
+}
+/* Eraser mode: cross-hair cursor suggests the eraser tip. */
+.dk-stage-host--eraser { cursor: cell; }
+.dk-stage { width: 512px; height: 512px; }
+
+/* Overlay above Konva; individual popups enable their own pointer events,
+   the host stays click-through so drawing still works beneath. */
+.dk-popup-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* -------------------------------------------------------------- popup bubbles */
+
+.dk-popup {
+  position: absolute;
+  max-width: 220px;
+  width: max-content;
+  padding: 9px 13px;
+  border-radius: 12px;
+  font-family: var(--dk-font);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--dk-text);
+  box-shadow: var(--dk-shadow-popup);
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  /* Positioned by app.js via explicit top-left (no centring transform); the
+     tail (::after) points back at the glyph via --dk-tail-x. */
+  animation: dk-rise var(--dk-dur-base) var(--dk-ease-out) both;
+}
+/* Canvas feedback bubbles never block drawing underneath. */
+.dk-popup--canvas {
+  pointer-events: none;
+  max-width: 240px;
+  z-index: 4;
+  /* Subtle transparency so overlapping content is still partially visible. */
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  /* Smooth opacity transitions for proximity-fade (JS toggles .dk-popup--dimmed). */
+  transition: opacity 180ms ease;
+}
+/* Semi-transparent backgrounds for canvas variants — status colour retained,
+   alpha reduced to ~0.93 so faint content bleeds through without hurting legibility. */
+.dk-popup--canvas.dk-popup--ok      { background: rgba(240,253,244, 0.93); --dk-popup-tail: rgba(240,253,244, 0.93); }
+.dk-popup--canvas.dk-popup--missing { background: rgba(255,251,235, 0.93); --dk-popup-tail: rgba(255,251,235, 0.93); }
+.dk-popup--canvas.dk-popup--error   { background: rgba(254,242,242, 0.93); --dk-popup-tail: rgba(254,242,242, 0.93); }
+.dk-popup--canvas.dk-popup--hint    { background: rgba(245,243,255, 0.93); --dk-popup-tail: rgba(245,243,255, 0.93); }
+/* Proximity-fade: JS adds this class when pointer is inside the bubble rect.
+   Drops opacity to 0.25 so the child sees the work beneath without fully hiding
+   the bubble — opacity restores smoothly when the pointer leaves. */
+.dk-popup--canvas.dk-popup--dimmed  { opacity: 0.25; }
+/* Icon: line-height:0 removes SVG descender gap; display:inline-flex centres it. */
+.dk-popup-icon { line-height: 0; display: inline-flex; align-items: center; flex-shrink: 0; }
+.dk-popup-text { flex: 1; }
+
+/* downward-pointing tail; x set by app.js (--dk-tail-x) so it points at the
+   glyph even when the bubble is clamped sideways. Colour per status variant. */
+.dk-popup::after {
+  content: "";
+  position: absolute;
+  left: var(--dk-tail-x, 50%);
+  top: 100%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--dk-popup-tail, var(--dk-bg-card));
+}
+/* flipped: bubble below its cell, tail points up */
+.dk-popup--below::after {
+  top: auto;
+  bottom: 100%;
+  border-top-color: transparent;
+  border-bottom-color: var(--dk-popup-tail, var(--dk-bg-card));
+}
+/* horizontal tails: bubble sits beside the anchor; tail points sideways at it.
+   --dk-tail-y (set by app.js) places it level with the anchor's vertical centre. */
+.dk-popup--tail-right::after {  /* bubble LEFT of anchor -> tail on RIGHT edge, points right */
+  left: 100%;
+  top: var(--dk-tail-y, 50%);
+  transform: translateY(-50%);
+  border-top-color: transparent;
+  border-left-color: var(--dk-popup-tail, var(--dk-bg-card));
+}
+.dk-popup--tail-left::after {   /* bubble RIGHT of anchor -> tail on LEFT edge, points left */
+  left: auto;
+  right: 100%;
+  top: var(--dk-tail-y, 50%);
+  transform: translateY(-50%);
+  border-top-color: transparent;
+  border-right-color: var(--dk-popup-tail, var(--dk-bg-card));
+}
+
+.dk-popup--ok {
+  background: var(--dk-ok-bg);  border: 1.5px solid var(--dk-ok-border);
+  --dk-popup-tail: var(--dk-ok-bg);
+}
+.dk-popup--ok .dk-popup-icon { color: var(--dk-ok); }
+
+.dk-popup--missing {
+  background: var(--dk-missing-bg); border: 1.5px solid var(--dk-missing-border);
+  --dk-popup-tail: var(--dk-missing-bg);
+  animation: dk-rise var(--dk-dur-base) var(--dk-ease-out) both,
+             dk-pulse 2s var(--dk-ease-linear) 3;
+}
+.dk-popup--missing .dk-popup-icon { color: var(--dk-missing); }
+
+.dk-popup--error {
+  background: var(--dk-error-bg); border: 1.5px solid var(--dk-error-border);
+  --dk-popup-tail: var(--dk-error-bg);
+  animation: dk-rise var(--dk-dur-base) var(--dk-ease-out) both,
+             dk-nudge 300ms var(--dk-ease-linear) 1;
+}
+.dk-popup--error .dk-popup-icon { color: var(--dk-error); }
+
+.dk-popup--hint {
+  background: var(--dk-hint-bg); border: 1.5px solid var(--dk-hint-border);
+  --dk-popup-tail: var(--dk-hint-bg);
+}
+.dk-popup--hint .dk-popup-icon { color: var(--dk-hint); }
+
+/* ----------------------------------------------------------------- actions */
+
+.dk-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  /* Match the pad width so the Check button right edge lines up with the
+     canvas right edge. */
+  width: 512px;
+  max-width: 100%;
+}
+
+/* Tool group: icon buttons in a shallow pill. */
+.dk-tool-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--dk-bg-secondary);
+  border: 1px solid var(--dk-border);
+  border-radius: var(--dk-radius-sm);
+  padding: 3px;
+}
+
+/* Thin vertical separator within the toolbar. */
+.dk-tool-sep {
+  width: 1px;
+  height: 22px;
+  background: var(--dk-border);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+/* Base tool button: square, icon-only or icon + short label. */
+.dk-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: var(--dk-tool-btn-sz);
+  min-width: var(--dk-tool-btn-sz);
+  padding: 0 10px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--dk-text-sub);
+  font-family: var(--dk-font);
+  font-size: var(--dk-fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dk-dur-fast) var(--dk-ease-out),
+              color var(--dk-dur-fast) var(--dk-ease-out);
+}
+.dk-tool-btn:hover:not(:disabled) {
+  background: var(--dk-bg-card);
+  color: var(--dk-text);
+}
+.dk-tool-btn:disabled { opacity: 0.38; cursor: default; }
+
+/* Active/pressed: distinct from hover. */
+.dk-tool-btn--active {
+  background: var(--dk-bg-card);
+  color: var(--dk-accent);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+}
+
+/* Ghost variant for Clear: de-emphasised within the group, red on hover. */
+.dk-tool-btn--ghost { color: var(--dk-text-sub); }
+.dk-tool-btn--ghost:hover:not(:disabled) { color: var(--dk-error); background: var(--dk-error-bg); }
+
+.dk-tool-icon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.dk-tool-label { white-space: nowrap; }
+
+/* Primary CTA: fixed width. */
+.dk-btn-check {
+  height: var(--dk-btn-check-h);
+  width: 140px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--dk-radius-sm);
+  background: var(--dk-accent);
+  color: var(--dk-text-inv);
+  font-family: var(--dk-font);
+  font-size: var(--dk-fs-base);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background var(--dk-dur-fast) var(--dk-ease-out),
+              transform 100ms var(--dk-ease-out);
+}
+.dk-btn-check:hover:not(:disabled) { background: var(--dk-accent-hover); }
+.dk-btn-check:active:not(:disabled) { transform: scale(0.97); }
+.dk-btn-check:disabled { opacity: 0.5; cursor: default; }
+
+/* loading state: swap label for spinner + "Checking" text */
+.dk-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2.5px solid rgba(255,255,255,0.4);
+  border-top-color: var(--dk-text-inv);
+  border-radius: 50%;
+  animation: dk-spin 700ms var(--dk-ease-linear) infinite;
+  flex-shrink: 0;
+}
+.dk-btn-check-loading {
+  display: none;
+  align-items: center;
+  gap: 7px;
+}
+.dk-btn-check-loading-label {
+  font-size: var(--dk-fs-base);
+  font-weight: 700;
+  color: var(--dk-text-inv);
+}
+.dk-btn-check[data-loading="true"] .dk-btn-check-label { display: none; }
+.dk-btn-check[data-loading="true"] .dk-btn-check-loading { display: flex; }
+
+/* --------------------------------------------------------- col 2: child feedback */
+
+/* Child-facing column: verdict + recognized + progress. Stacks cards vertically. */
+.dk-feedback-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* --------------------------------------------------------- col 3: dev diagnostics */
+
+/* Developer diagnostics column: muted, compact, visually de-emphasized. */
+.dk-dev-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* "Dev" label: small all-caps tag visually marking the column as non-child-facing. */
+.dk-dev-label {
+  font-size: var(--dk-fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--dk-text-sub);
+  opacity: 0.55;
+  padding: 0 4px;
+}
+
+/* Dev card variant: lower visual weight than the child-facing cards. */
+.dk-card--dev {
+  background: var(--dk-bg-secondary);
+  border-color: var(--dk-border-soft);
+  box-shadow: none;
+}
+.dk-card--dev .dk-card-title { opacity: 0.75; }
+.dk-card--dev .dk-stat-pill  { font-size: var(--dk-fs-xs); }
+.dk-card--dev .dk-badge       { font-size: var(--dk-fs-xs); }
+
+/* Secondary card variant: progress is real but tertiary. De-emphasised slightly. */
+.dk-card--secondary {
+  background: var(--dk-bg-secondary);
+  border-color: var(--dk-border-soft);
+  box-shadow: none;
+}
+.dk-card--secondary .dk-card-title { opacity: 0.7; }
+.dk-card--secondary .dk-marks      { font-size: var(--dk-fs-base); font-weight: 700; }
+
+/* Legacy: keep .dk-panel in case anything references it (unused after refactor). */
+.dk-panel { display: flex; flex-direction: column; gap: 12px; }
+
+.dk-card {
+  background: var(--dk-bg-card);
+  border: 1px solid var(--dk-border-soft);
+  border-radius: var(--dk-radius);
+  padding: 18px 20px;
+  box-shadow: var(--dk-shadow);
+}
+.dk-card-title {
+  margin: 0 0 12px;
+  font-size: var(--dk-fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--dk-text-sub);
+}
+.dk-card-body { display: flex; flex-direction: column; gap: 10px; }
+
+/* Card 1: recognized equation, read as drawn. */
+.dk-recognized {
+  font-family: var(--dk-font-mono);
+  font-size: var(--dk-fs-display);
+  font-weight: 700;
+  color: var(--dk-text);
+  line-height: 1.1;
+  word-break: break-word;
+}
+.dk-kind-pill {
+  align-self: flex-start;
+  padding: 3px 12px;
+  border-radius: var(--dk-radius-sm);
+  background: var(--dk-bg-secondary);
+  font-size: var(--dk-fs-sm);
+  font-weight: 600;
+  color: var(--dk-text-sub);
+}
+.dk-recognized-count {
+  font-size: var(--dk-fs-sm);
+  color: var(--dk-text-sub);
+  font-weight: 500;
+}
+.dk-chips { display: flex; flex-direction: column; gap: 4px; }
+.dk-chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* Column-aligned token grid: each grid_col maps to a CSS column so place-value
+   columns align vertically. grid-template-columns is set inline by app.js. */
+.dk-token-grid {
+  display: grid;
+  gap: 2px 4px;
+  align-items: center;
+}
+/* One cell per (row, grid_col) slot; empty slots are blank spacers. */
+.dk-token-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 28px;
+  min-height: 28px;
+}
+
+.dk-chip {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--dk-bg-secondary);
+  border: 1px solid var(--dk-border-soft);
+  font-family: var(--dk-font-mono);
+  font-size: var(--dk-fs-xs);
+  color: var(--dk-text-sub);
+}
+
+.dk-chip--warn { font-style: italic; opacity: 0.8; }
+
+/* -------------------------------------------------------- Card 4: Feedback */
+
+/* Single-headline feedback list: one outcome icon + guiding sentence.
+   <ul>/<li> preserved for accessibility (role=status on the card). */
+.dk-feedback-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Single headline item per Check result. */
+.dk-feedback-headline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 14px;
+  border-radius: var(--dk-radius-sm);
+  font-size: var(--dk-fs-base);
+  line-height: 1.3;
+  border: 1px solid transparent;
+  animation: dk-rise var(--dk-dur-base) var(--dk-ease-out) both;
+}
+
+.dk-feedback-headline-icon {
+  flex-shrink: 0;
+  /* line-height:0 removes the descender gap below inline SVG;
+     the icon's visual centre aligns with the text via align-items:center. */
+  line-height: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dk-feedback-headline-msg {
+  flex: 1;
+  font-weight: 500;
+  color: var(--dk-text);
+}
+
+/* Outcome variants: muted, calm. */
+.dk-feedback-headline--correct {
+  background: var(--dk-ok-bg);
+  border-color: var(--dk-ok-border);
+}
+.dk-feedback-headline--correct .dk-feedback-headline-icon { color: var(--dk-ok); }
+
+.dk-feedback-headline--mistake {
+  background: var(--dk-error-bg);
+  border-color: var(--dk-error-border);
+}
+.dk-feedback-headline--mistake .dk-feedback-headline-icon { color: var(--dk-error); }
+
+.dk-feedback-headline--missing_step {
+  background: var(--dk-hint-bg);
+  border-color: var(--dk-hint-border);
+}
+.dk-feedback-headline--missing_step .dk-feedback-headline-icon { color: var(--dk-hint); }
+
+.dk-feedback-headline--incomplete {
+  background: var(--dk-missing-bg);
+  border-color: var(--dk-missing-border);
+}
+.dk-feedback-headline--incomplete .dk-feedback-headline-icon { color: var(--dk-missing); }
+
+/* engine feedback detail lines: one per feedback/hint entry below the headline. */
+.dk-feedback-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: var(--dk-radius-sm);
+  font-size: var(--dk-fs-sm);
+  line-height: 1.5;
+  border: 1px solid transparent;
+  margin-top: 4px;
+}
+.dk-feedback-message-icon {
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+  width: 18px;
+  text-align: center;
+  padding-top: 1px;
+}
+.dk-feedback-message-text {
+  flex: 1;
+  color: var(--dk-text);
+  font-weight: 400;
+}
+/* Error detail line (SubtractShortWithReplacement, BorrowedAlreadyFeedback). */
+.dk-feedback-message--error {
+  background: var(--dk-error-bg);
+  border-color: var(--dk-error-border);
+}
+.dk-feedback-message--error .dk-feedback-message-icon { color: var(--dk-error); }
+/* Hint detail line (ProductWithOverflow). */
+.dk-feedback-message--hint {
+  background: var(--dk-hint-bg);
+  border-color: var(--dk-hint-border);
+}
+.dk-feedback-message--hint .dk-feedback-message-icon { color: var(--dk-hint); }
+
+.dk-stat-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.dk-stat-pill {
+  padding: 4px 12px;
+  border-radius: var(--dk-radius-pill);
+  background: var(--dk-bg-secondary);
+  font-family: var(--dk-font-mono);
+  font-size: var(--dk-fs-sm);
+  font-weight: 600;
+  color: var(--dk-text);
+}
+.dk-badge {
+  padding: 4px 12px;
+  border-radius: var(--dk-radius-pill);
+  font-size: var(--dk-fs-sm);
+  font-weight: 700;
+  border: 1px solid var(--dk-border);
+  background: var(--dk-bg-secondary);
+  color: var(--dk-text-sub);
+}
+.dk-badge--on  { background: var(--dk-ok-bg);  border-color: var(--dk-ok-border);  color: var(--dk-ok); }
+.dk-badge--off { background: var(--dk-bg-secondary); border-color: var(--dk-border); color: var(--dk-text-sub); }
+
+.dk-timings-header { display: flex; align-items: center; gap: 5px; font-size: var(--dk-fs-sm); color: var(--dk-text-sub); margin-bottom: 4px; }
+.dk-timings-header svg { flex-shrink: 0; opacity: 0.6; }
+.dk-timings-list { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; }
+.dk-timings-list dt { font-size: var(--dk-fs-sm); color: var(--dk-text-sub); }
+.dk-timings-list dd { margin: 0; font-family: var(--dk-font-mono); font-size: var(--dk-fs-sm); color: var(--dk-text); text-align: right; }
+
+/* engine Exchange dev card */
+.dk-engine-section { margin-top: 10px; }
+.dk-engine-section + .dk-engine-section { margin-top: 14px; border-top: 1px solid var(--dk-border-soft); padding-top: 14px; }
+.dk-engine-section-label { font-size: var(--dk-fs-xs); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dk-text-sub); margin-bottom: 6px; }
+.dk-engine-kv { display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px; }
+.dk-engine-key { font-size: var(--dk-fs-xs); color: var(--dk-text-sub); min-width: 56px; }
+.dk-engine-val { font-family: var(--dk-font-mono); font-size: var(--dk-fs-xs); color: var(--dk-text); word-break: break-all; }
+.dk-engine-subsection { font-size: var(--dk-fs-xs); color: var(--dk-text-sub); margin: 8px 0 4px; font-style: italic; }
+.dk-engine-note { font-size: var(--dk-fs-xs); color: var(--dk-missing); margin: 4px 0; font-style: italic; }
+/* Legacy flat table — kept for future use / fallback. Currently replaced by grid. */
+.dk-engine-table { border-collapse: collapse; width: 100%; margin-top: 4px; }
+.dk-engine-table th { font-size: var(--dk-fs-xs); font-weight: 600; color: var(--dk-text-sub); text-align: left; padding: 2px 6px 4px 0; border-bottom: 1px solid var(--dk-border-soft); }
+.dk-engine-table td { font-family: var(--dk-font-mono); font-size: var(--dk-fs-xs); padding: 2px 6px 2px 0; color: var(--dk-text); vertical-align: top; }
+.dk-engine-status--ok { color: var(--dk-ok); }
+.dk-engine-status--error { color: var(--dk-error); }
+.dk-engine-status--missing { color: var(--dk-missing); }
+.dk-engine-role--fixed { color: var(--dk-text-sub); }
+.dk-engine-role--generated { color: var(--dk-text); }
+
+/* ---- engine Exchange positional grid ----------------------------------------- */
+
+/* Wrapper: horizontal scroll so a wide problem doesn't overflow the dev card. */
+.dk-engine-grid-wrap {
+  overflow-x: auto;
+  margin-top: 4px;
+}
+
+/* The grid itself: columns set inline by JS (one per engine x-column). */
+.dk-engine-grid {
+  display: inline-grid;
+  gap: 3px;
+  font-family: var(--dk-font-mono);
+  font-size: var(--dk-fs-xs);
+  line-height: 1;
+}
+
+/* One cell per (row, col) coordinate. Fixed size so the grid stays tidy. */
+.dk-engine-cell {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  background: var(--dk-bg-card);
+}
+
+/* SENT grid: role styling. FIXED = muted (given digits); GENERATED = normal (child answers). */
+.dk-engine-cell--fixed {
+  color: var(--dk-text-sub);
+  background: var(--dk-bg-secondary);
+  border-color: var(--dk-border-soft);
+  opacity: 0.6;
+}
+.dk-engine-cell--generated {
+  color: var(--dk-text);
+  background: var(--dk-bg-card);
+  border-color: var(--dk-border);
+}
+
+/* RECEIVED grid: status colouring mirrors status tokens. */
+.dk-engine-cell--ok {
+  color: var(--dk-ok);
+  background: var(--dk-ok-bg);
+  border-color: var(--dk-ok-border);
+}
+.dk-engine-cell--error {
+  color: var(--dk-error);
+  background: var(--dk-error-bg);
+  border-color: var(--dk-error-border);
+}
+.dk-engine-cell--missing {
+  color: var(--dk-missing);
+  background: var(--dk-missing-bg);
+  border-color: var(--dk-missing-border);
+}
+.dk-engine-cell--hint {
+  color: var(--dk-hint);
+  background: var(--dk-hint-bg);
+  border-color: var(--dk-hint-border);
+}
+
+/* Legend row below the grid: small colour-coded swatches. */
+.dk-engine-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin-top: 6px;
+}
+.dk-engine-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--dk-fs-xs);
+  color: var(--dk-text-sub);
+}
+.dk-engine-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Card 3: marks + progress. */
+.dk-marks { font-size: var(--dk-fs-lg); font-weight: 800; color: var(--dk-text); }
+.dk-progress { display: flex; align-items: center; gap: 10px; }
+.dk-progress-track {
+  flex: 1;
+  height: 10px;
+  border-radius: var(--dk-radius-pill);
+  background: var(--dk-bg-secondary);
+  overflow: hidden;
+}
+.dk-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: var(--dk-radius-pill);
+  background: var(--dk-accent-2);
+  transition: width 400ms var(--dk-ease-out);
+}
+.dk-progress-text { font-size: var(--dk-fs-sm); font-weight: 600; color: var(--dk-text-sub); min-width: 36px; text-align: right; }
+
+.dk-reconcile {
+  padding: 10px 14px;
+  border-radius: var(--dk-radius-sm);
+  background: var(--dk-missing-bg);
+  border: 1px solid var(--dk-missing-border);
+  color: var(--dk-missing);
+  font-size: var(--dk-fs-sm);
+  line-height: 1.4;
+}
+
+/* ====================================================== icon helper */
+
+/* Inline SVG icon wrapper. All icons are aria-hidden; surrounding text carries
+   the accessible label. Line-height 0 removes descender gap under SVG. */
+.dk-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  flex-shrink: 0;
+}
+
+/* ====================================================== empty state */
+
+/* Shown in the feedback column before the first Check; hidden by app.js after. */
+.dk-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 36px 24px;
+  border: 1.5px dashed var(--dk-border);
+  border-radius: var(--dk-radius);
+  background: var(--dk-bg-secondary);
+  color: var(--dk-text-sub);
+}
+.dk-empty-icon {
+  width: 40px;
+  height: 40px;
+  opacity: 0.35;
+  flex-shrink: 0;
+}
+.dk-empty-heading {
+  margin: 0;
+  font-size: var(--dk-fs-base);
+  font-weight: 700;
+  color: var(--dk-text);
+  opacity: 0.65;
+}
+.dk-empty-sub {
+  margin: 0;
+  font-size: var(--dk-fs-sm);
+  color: var(--dk-text-sub);
+}
+
+/* Recognized card: empty placeholder text shown via CSS when data-empty="true". */
+.dk-recognized[data-empty="true"]::before {
+  content: "Nothing recognized yet";
+  font-family: var(--dk-font);
+  font-size: var(--dk-fs-sm);
+  font-weight: 500;
+  color: var(--dk-text-sub);
+  opacity: 0.55;
+}
+
+/* ====================================================== feedback error state */
+
+/* Recoverable error component: icon + message + retry button.
+   Rendered inside the feedback list by showFeedbackError(). */
+.dk-feedback-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--dk-radius-sm);
+  background: var(--dk-error-bg);
+  border: 1px solid var(--dk-error-border);
+  list-style: none;
+  animation: dk-rise var(--dk-dur-base) var(--dk-ease-out) both;
+}
+.dk-feedback-error-icon {
+  color: var(--dk-error);
+  margin-top: 2px;
+}
+.dk-feedback-error-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.dk-feedback-error-msg {
+  margin: 0;
+  font-size: var(--dk-fs-sm);
+  line-height: 1.5;
+  color: var(--dk-text);
+}
+.dk-feedback-error-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1.5px solid var(--dk-error-border);
+  border-radius: var(--dk-radius-sm);
+  background: transparent;
+  color: var(--dk-error);
+  font-family: var(--dk-font);
+  font-size: var(--dk-fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dk-dur-fast) var(--dk-ease-out);
+  align-self: flex-start;
+}
+.dk-feedback-error-retry:hover { background: var(--dk-error-bg); }
+.dk-feedback-error-retry:focus-visible {
+  outline: 2px solid var(--dk-error);
+  outline-offset: 2px;
+}
+
+/* ====================================================== canvas check overlay */
+
+/* SVG check mark rendered as an HTML div over the Konva canvas for the correct state.
+   Positioned via app.js (left/top set to the anchor coords). */
+.dk-canvas-check {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(22, 163, 74, 0.12);
+  color: rgba(22, 163, 74, 0.75);
+  pointer-events: none;
+  animation: dk-rise 350ms var(--dk-ease-out) both;
+  z-index: 3;
+}
+.dk-canvas-check svg { width: 22px; height: 22px; }
+
+/* ====================================================== focus rings */
+
+/* Visible focus ring for keyboard navigation (not shown on mouse click).
+   Applies to all interactive elements. */
+.dk-pill:focus-visible,
+.dk-tool-btn:focus-visible,
+.dk-btn-check:focus-visible {
+  outline: 2px solid var(--dk-accent);
+  outline-offset: 2px;
+}
+.dk-tool-btn:focus-visible {
+  outline-offset: 1px;
+}
+
+/* ====================================================== responsive */
+
+/* Intermediate: drop the dev column to a second row beneath the other two. */
+@media (max-width: 1200px) {
+  .dk-main {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto;
+  }
+  .dk-dev-col {
+    grid-column: 1 / -1;   /* full-width dev row beneath the two main cols */
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .dk-dev-label { display: none; }
+}
+
+/* Narrow: single column, draw pad first, feedback below, dev last. */
+@media (max-width: 900px) {
+  .dk-main {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .dk-feedback-col { order: 2; }
+  .dk-dev-col {
+    order: 3;
+    grid-column: 1;
+    flex-direction: column;
+  }
+  .dk-picker { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-popup, .dk-popup--missing, .dk-popup--error, .dk-progress-fill, .dk-spinner {
+    animation: none !important;
+    transition: none !important;
+  }
+}

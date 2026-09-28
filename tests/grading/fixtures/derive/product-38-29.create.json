@@ -1,0 +1,22 @@
+[
+  {
+    "success": true,
+    "sessions": [
+      {
+        "success": true,
+        "sessionId": "5fd026d3-0f78-448c-b679-aacb6bee3cde",
+        "type": "SINGLE",
+        "solution": false,
+        "marksTotal": 1,
+        "interactions": {
+          "K0HwQ": {
+            "type": "ARITHMETIC",
+            "marks": 1,
+            "scorable": true
+          }
+        },
+        "html": "<engine-exercise session-id=\"5fd026d3-0f78-448c-b679-aacb6bee3cde\" app-id=\"demo.exercise-app\" engine-init=\"inline\" ><script type=\"grading/init-data\">{\"events\":{\"_main\":[{\"name\":\"createQuestion\",\"timestamp\":1781993915489,\"in\":{\"id\":\"Q1\"},\"out\":{\"newQuestionId\":\"Q1\",\"interactions\":[{\"refId\":\"K0HwQ\"}]}}],\"K0HwQ\":[]},\"view\":{\"i18n\":[\"uk\",\"en\"],\"showHints\":true,\"numeralSystem\":\"ARABIC_DECIMALPOINT\",\"elements\":[{\"id\":\"Q1\",\"type\":\"QUESTION\",\"instructionType\":\"SCRIPT\",\"content\":[{\"mimeType\":\"text/plain\",\"content\":\"<div data-ref-id=\\\"ZxmHv\\\" data-ref-name=\\\"Block 1\\\">Calculate \"},{\"mimeType\":\"application/x-tex\",\"content\":\"$38$\",\"engine\":\"FormattedNumber[38, 0, 0]\"},{\"mimeType\":\"text/plain\",\"content\":\" times \"},{\"mimeType\":\"application/x-tex\",\"content\":\"$29$\",\"engine\":\"FormattedNumber[29, 0, 0]\"},{\"mimeType\":\"text/plain\",\"content\":\".</div><p><engine-interaction ref-id=\\\"K0HwQ\\\" ref-name=\\\"I1\\\"></engine-interaction></p>\"}],\"interactions\":[{\"id\":\"K0HwQ\",\"ans\":{\"id\":\"$$\\\\verb|solution|$$\",\"type\":\"ARITHMETIC\",\"i18n\":[\"en\"],\"width\":4,\"height\":8,\"attributeMap\":{\"areaMap\":{\"product\":{\"id\":\"product\",\"left\":0,\"bottom\":7,\"width\":4,\"type\":\"OVERFLOW\",\"multilevel\":true},\"rtl_line_0\":{\"id\":\"rtl_line_0\",\"left\":3,\"bottom\":3,\"width\":1,\"type\":\"RIGHT_TO_LEFT\"},\"rtl_line_1\":{\"id\":\"rtl_line_1\",\"left\":3,\"bottom\":2,\"width\":1,\"type\":\"RIGHT_TO_LEFT\"},\"answer-line\":{\"id\":\"answer-line\",\"left\":0,\"bottom\":1,\"width\":4,\"type\":\"LINE\"},\"rtl_answer\":{\"id\":\"rtl_answer\",\"left\":3,\"bottom\":0,\"width\":1,\"type\":\"RIGHT_TO_LEFT\"}}},\"tokens\":[{\"id\":\"G4\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":1,\"y\":4,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]},{\"id\":\"G5\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":2,\"y\":4,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]},{\"id\":\"G6\",\"type\":\"SYMBOL\",\"c\":\"_\",\"x\":3,\"y\":4,\"clist\":null,\"tags\":[\"FIXED\",\"GENERATED\"]}],\"input\":null,\"thousandsSeparator\":\"NONE\",\"cursor\":{\"x\":1,\"y\":5}},\"inline\":false,\"solution\":null,\"i18n\":[\"uk\",\"en\"],\"numeralSystem\":\"ARABIC_DECIMALPOINT\",\"extendedInline\":false,\"interactionOptions\":{},\"enableCalculator\":false,\"scored\":true,\"marksTotal\":1}],\"resources\":[]}],\"assessmentMode\":false,\"questionMode\":\"ONE_BY_ONE\"},\"attributes\":{}}</script></engine-exercise>"
+      }
+    ]
+  }
+]

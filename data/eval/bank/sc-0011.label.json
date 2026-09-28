@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0011",
+  "equation_kind": "addition",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0013",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {"flattened": "main_1", "bbox_px": [152, 46, 168, 124]},
+    {"flattened": "main_2", "bbox_px": [190, 55, 244, 118]},
+    {"flattened": "main_3", "bbox_px": [265, 48, 335, 114]},
+    {"flattened": "main_4", "bbox_px": [211, 140, 253, 217]},
+    {"flattened": "main_6", "bbox_px": [280, 136, 320, 203]},
+    {"flattened": "op_plus", "bbox_px": [67, 167, 136, 248]},
+    {"flattened": "result_bar", "bbox_px": [152, 222, 373, 232]},
+    {"flattened": "main_1", "bbox_px": [162, 247, 172, 315]},
+    {"flattened": "main_6", "bbox_px": [215, 236, 261, 299]},
+    {"flattened": "main_9", "bbox_px": [277, 245, 320, 323]}
+  ],
+  "intended_text": "123 + 46 = 169",
+  "notes": "Audit fix (2026-05-21): rewrote all 10 symbols from connected components. Previous labels had wrong digit (6 vs 3) and extra spurious digit."
+}

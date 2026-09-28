@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0025",
+  "equation_kind": "addition",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0029",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {"flattened": "main_1", "bbox_px": [190, 99, 227, 188]},
+    {"flattened": "main_2", "bbox_px": [286, 85, 374, 192]},
+    {"flattened": "op_plus", "bbox_px": [26, 240, 86, 335]},
+    {"flattened": "main_4", "bbox_px": [184, 230, 242, 308]},
+    {"flattened": "main_7", "bbox_px": [335, 240, 389, 296]}
+  ],
+  "intended_text": "12 + 47 (no bar, no result)",
+  "notes": "Audit fix (2026-05-21): 5 symbols per user verification. Top 12, middle + 47. No bar, no result drawn."
+}

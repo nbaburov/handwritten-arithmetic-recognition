@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0020",
+  "equation_kind": "subtraction",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0024",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {
+      "flattened": "op_minus",
+      "bbox_px": [
+        100.52981567382812,
+        121.0208740234375,
+        222.3919677734375,
+        234.284912109375
+      ]
+    },
+    {
+      "flattened": "main_9",
+      "bbox_px": [
+        169.53237915039062,
+        254.862548828125,
+        236.49734497070312,
+        351.856689453125
+      ]
+    },
+    {
+      "flattened": "result_bar",
+      "bbox_px": [
+        27.078460693359375,
+        382.842529296875,
+        284.0740661621094,
+        399.9163818359375
+      ]
+    },
+    {
+      "flattened": "main_2",
+      "bbox_px": [
+        0.0,
+        0.0,
+        0.1,
+        0.1
+      ]
+    },
+    {
+      "flattened": "main_1",
+      "bbox_px": [
+        0.0,
+        0.0,
+        0.1,
+        0.1
+      ]
+    }
+  ],
+  "intended_text": "21-9=",
+  "notes": "top row 21 entirely undetected",
+  "has_unlocated_missed": true,
+  "n_missed_unlocated": 2
+}

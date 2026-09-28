@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "sample": "06-division-simple-divsym",
+  "equation_kind": "division",
+  "symbols": [
+    {"flattened": "main_2", "bbox_px": [260, 89, 329, 147]},
+    {"flattened": "main_8", "bbox_px": [336, 89, 423, 184]},
+    {"flattened": "op_divide", "bbox_px": [110, 233, 229, 295]},
+    {"flattened": "main_4", "bbox_px": [354, 221, 393, 317]},
+    {"flattened": "result_bar", "bbox_px": [182, 340, 421, 346]},
+    {"flattened": "main_7", "bbox_px": [243, 370, 313, 433]},
+    {"flattened": "main_6", "bbox_px": [327, 381, 366, 447]}
+  ],
+  "intended_text": "28 / 4 = 76",
+  "notes": "Manual annotation: simple division with div symbol. Top 28, middle div_sym + 4, result_bar, bottom 76. The op_divide combines 3 connected components (main stroke + 2 dots) into one symbol per ontology convention. 7 symbols. Bboxes from connected-component analysis on preprocessed 512x512.",
+  "pending_manual_review": false
+}

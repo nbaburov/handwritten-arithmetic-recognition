@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "sample": "03-subtraction-3digit-result",
+  "equation_kind": "subtraction",
+  "symbols": [
+    {"flattened": "main_1", "bbox_px": [184, 87, 228, 156]},
+    {"flattened": "main_3", "bbox_px": [243, 84, 301, 150]},
+    {"flattened": "main_6", "bbox_px": [312, 88, 375, 168]},
+    {"flattened": "op_minus", "bbox_px": [62, 212, 154, 219]},
+    {"flattened": "main_7", "bbox_px": [190, 189, 247, 242]},
+    {"flattened": "main_5", "bbox_px": [230, 189, 310, 235]},
+    {"flattened": "main_6", "bbox_px": [292, 191, 352, 245]},
+    {"flattened": "result_bar", "bbox_px": [154, 265, 495, 271]},
+    {"flattened": "op_minus", "bbox_px": [134, 310, 157, 314]},
+    {"flattened": "main_6", "bbox_px": [171, 287, 208, 334]},
+    {"flattened": "main_2", "bbox_px": [253, 297, 295, 328]},
+    {"flattened": "main_0", "bbox_px": [319, 294, 362, 336]}
+  ],
+  "has_unlocated_missed": false,
+  "n_missed_unlocated": 0,
+  "intended_text": "136 - 756 = -620",
+  "notes": "Manual annotation: 3-digit subtraction with negative result. Row 1: 136. Row 2: -756. Result row: -620. Op_minus appears twice (operator + negative sign on result). Bboxes derived from connected-component analysis on preprocessed 512x512 canvas.",
+  "pending_manual_review": false
+}

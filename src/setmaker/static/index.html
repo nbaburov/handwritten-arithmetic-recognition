@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>set-maker</title>
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+  <!--
+    Single-screen annotator (WS-H). The whole loop lives here:
+      pick mode -> see the target reference -> draw with stylus/pointer -> Detect
+      -> fix only flagged boxes -> Save -> auto-advance, progress bar updates.
+    All logic is in app.js; this file is structure only. Konva is vendored offline
+    in vendor/konva.min.js (no build step, no CDN at runtime).
+  -->
+  <header class="sm-topbar">
+    <div class="sm-brand">
+      <span class="sm-brand-name">set-maker</span>
+      <span class="sm-brand-sub">eval + train scene builder</span>
+    </div>
+
+    <div class="sm-mode" role="group" aria-label="Worklist mode">
+      <button id="mode-eval" class="sm-mode-btn" type="button" aria-pressed="false">Eval</button>
+      <button id="mode-train" class="sm-mode-btn" type="button" aria-pressed="false">Train</button>
+      <label id="budget-wrap" class="sm-budget" hidden>
+        round budget
+        <input id="round-budget" class="sm-budget-input" type="number" min="1" step="1" value="300" />
+        <small class="sm-budget-hint">~300 = the whole round-1 team target; split it across teammates (don't draw 300 each). Re-train + re-eval before another round.</small>
+      </label>
+      <button id="mode-start" class="sm-mode-start" type="button" disabled>Start</button>
+      <!-- Shown only when a persisted session for the armed mode still has scenes
+           left, so the human resumes at the saved cursor instead of rebuilding
+           the worklist from scratch. app.js toggles [hidden] after probing. -->
+      <button id="mode-resume" class="sm-mode-start" type="button" hidden>Resume</button>
+    </div>
+
+    <div class="sm-progress" aria-label="Progress">
+      <div class="sm-progress-bar"><div id="progress-fill" class="sm-progress-fill"></div></div>
+      <span id="progress-text" class="sm-progress-text">no worklist</span>
+    </div>
+  </header>
+
+  <!-- Non-blocking status line: notices, warnings, errors from the API. -->
+  <div id="banner" class="sm-banner" role="status" hidden></div>
+
+  <!-- Error-directive instruction banner: shown when the current worklist item
+       has directive="error". Prominent, above the canvas so the human cannot
+       miss it. app.js toggles [hidden] per item. -->
+  <div id="error-directive-banner" class="sm-error-directive-banner" role="alert" hidden>
+    ⚠ Draw this equation WITH a deliberate mistake (wrong digit, wrong operator,
+    or wrong/extra/missing carry or borrow). Fix the boxes to match what you drew,
+    then choose the error kind in the dropdown before saving.
+  </div>
+
+  <main class="sm-main">
+    <!-- Left rail: the target the human is asked to reproduce by hand. -->
+    <aside class="sm-rail">
+      <!-- Always-available labeling guidance (B3). Collapsible so it stays out
+           of the way once learned, but discoverable for a first-time labeller.
+           Content is mode-aware: app.js toggles the train-only grid block and
+           the eval-only error-kind block via [hidden] in updateHelpForMode().
+           The rules here mirror the as-drawn discipline: label what is drawn,
+           never correct the maths. -->
+      <details id="help-panel" class="sm-card sm-card--help-panel">
+        <summary class="sm-help-summary">
+          <span class="sm-help-summary-title">How to label</span>
+          <span class="sm-help-summary-hint">read me before labelling</span>
+        </summary>
+        <div class="sm-card-body sm-help-body">
+          <p class="sm-help-lead">
+            Label every box as it is actually drawn on the canvas. Never correct
+            the maths: if the drawing shows wrong arithmetic, label the wrong
+            symbols that are there, then tag the error kind. The model learns to
+            read what a child wrote, not what the child should have written.
+          </p>
+
+          <div id="help-grid" class="sm-help-section">
+            <h3 class="sm-help-h">Row index</h3>
+            <p>
+              The horizontal line a symbol sits on, counted from the top starting
+              at 0. The top operand is row 0, the next operand row 1, and so on.
+              The result under the result bar is its own row below the operands.
+              In long division and multi-row multiplication, each partial-product
+              line and each subtraction step is its own row. A carry or a borrow
+              shares the row of the digits it is written above (it does not get a
+              row of its own).
+            </p>
+
+            <h3 class="sm-help-h">Column index</h3>
+            <p>
+              The vertical place-value column a symbol sits in, counted from the
+              left starting at 0. The units column is the rightmost column, tens
+              to its left, then hundreds, and so on. Digits that line up vertically
+              (units under units, tens under tens) share the same column index.
+              An operator sits in its own column to the left of the operands.
+            </p>
+
+            <h3 class="sm-help-h">Equation idx</h3>
+            <p>
+              Which equation the symbol belongs to, starting at 0. There is almost
+              always a single equation per scene here, so leave this at 0 unless a
+              scene clearly holds two separate equations side by side.
+            </p>
+          </div>
+
+          <div class="sm-help-section">
+            <h3 class="sm-help-h">When it is an error (and when it is not)</h3>
+            <p>
+              Most scenes are normal correct or partial equations: draw and label
+              them as they are, and leave the error kind on (none).
+            </p>
+            <p id="help-error-eval">
+              When the scene asks you to draw a deliberate mistake (the warning
+              banner above the canvas), draw the wrong maths on purpose, fix the
+              boxes so the labels match exactly what you drew, then pick the error
+              kind that describes the mistake: a wrong operator, a wrong result, a
+              wrong digit, or a wrong, extra, or missing carry or borrow.
+            </p>
+            <p id="help-error-train">
+              If a scene you are drawing contains a mistake, still label every box
+              as the wrong symbol you actually drew. Do not fix the digits or the
+              operator to make the answer correct; the as-drawn labels are the
+              ground truth the model is trained on.
+            </p>
+          </div>
+
+          <div class="sm-help-section">
+            <h3 class="sm-help-h">When unsure</h3>
+            <p>
+              Label exactly what is on the canvas, never the corrected maths. If a
+              glyph is messy or ambiguous, pick the closest digit it most looks
+              like. If a detected box is the wrong shape or in the wrong place, fix
+              it by dragging or resizing, or delete it and add a new one. A box
+              stays flagged (orange) until you confirm or correct its label, so
+              clear every flag before saving.
+            </p>
+          </div>
+        </div>
+      </details>
+
+      <section class="sm-card">
+        <h2 class="sm-card-title">Target</h2>
+        <div class="sm-card-body">
+          <div class="sm-target-ref" id="target-ref">No worklist. Pick a mode and press Start.</div>
+          <dl class="sm-target-meta" id="target-meta"></dl>
+          <!-- EVAL only: tag a deliberately wrong as-drawn scene. The target
+               stays clean; the human draws the error, fixes labels to as-drawn,
+               then picks the kind here before saving. app.js fills the options
+               from ERROR_KINDS and toggles [hidden] by mode. -->
+          <label id="error-kind-wrap" class="sm-error-kind" hidden>
+            error kind
+            <select id="error-kind" class="sm-error-kind-select"></select>
+          </label>
+          <!-- Inline hint under the error-kind dropdown: states the one rule that
+               matters here (tag the drawn mistake, leave none for correct scenes).
+               app.js does not toggle this; it lives with the eval-only control. -->
+          <p id="error-kind-hint" class="sm-field-hint sm-field-hint--error" hidden>
+            Pick a kind only if you drew the maths wrong on purpose; leave it on
+            (none) for a normal correct or partial equation. wrong_carry / wrong_borrow
+            cover a carry/borrow with the wrong value OR drawn in the wrong column.
+          </p>
+        </div>
+      </section>
+
+      <section class="sm-card">
+        <h2 class="sm-card-title">Selected box</h2>
+        <div class="sm-card-body" id="inspector">
+          <p class="sm-empty">Nothing selected. Click a box, or draw and press Detect.</p>
+        </div>
+      </section>
+
+      <section class="sm-card sm-card--help">
+        <h2 class="sm-card-title">Keys</h2>
+        <div class="sm-card-body sm-keys">
+          <div><kbd>0</kbd>–<kbd>9</kbd> set main digit</div>
+          <div><kbd>+</kbd> <kbd>-</kbd> <kbd>/</kbd> set operator (+&nbsp;−&nbsp;÷)</div>
+          <div><kbd>*</kbd> or <kbd>=</kbd> set times / plus</div>
+          <div><kbd>b</kbd> result bar · <kbd>k</kbd> division bracket</div>
+          <div><kbd>c</kbd> then <kbd>0</kbd>–<kbd>9</kbd> carry digit</div>
+          <div><kbd>v</kbd> then <kbd>0</kbd>–<kbd>9</kbd> borrow digit</div>
+          <div><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd> move selection</div>
+          <div><kbd>d</kbd> detect · <kbd>n</kbd> new box</div>
+          <div><kbd>f</kbd> toggle flag · <kbd>Del</kbd> delete box</div>
+          <div><kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>Z</kbd> undo last stroke</div>
+          <div><kbd>e</kbd> toggle eraser (click stroke to delete)</div>
+          <div><kbd>Enter</kbd> save + next</div>
+        </div>
+      </section>
+    </aside>
+
+    <!-- Centre: the canvas the human draws on, with the box layer on top. -->
+    <section class="sm-stage-wrap">
+      <div class="sm-toolbar">
+        <button id="btn-detect" class="sm-btn sm-btn--primary" type="button" disabled>Detect</button>
+        <button id="btn-add" class="sm-btn" type="button" disabled>Add box</button>
+        <button id="btn-clear-draw" class="sm-btn" type="button" disabled>Clear drawing</button>
+        <button id="btn-undo" class="sm-btn" type="button" disabled aria-label="Undo last stroke">Undo</button>
+        <button id="btn-eraser" class="sm-btn" type="button" disabled aria-pressed="false" aria-label="Toggle eraser mode">Eraser</button>
+        <label class="sm-pen">
+          pen
+          <input id="pen-size" class="sm-pen-size" type="range" min="2" max="10" step="1" value="3" />
+        </label>
+        <span class="sm-spacer"></span>
+        <button id="btn-save" class="sm-btn sm-btn--accent" type="button" disabled>Save + next</button>
+      </div>
+
+      <!-- Konva mounts its two layers (draw + boxes) inside #stage. The chip
+           overlay is plain HTML positioned over each box by app.js. -->
+      <div class="sm-stage-host">
+        <div id="stage" class="sm-stage" aria-label="Drawing canvas"></div>
+        <div id="chip-layer" class="sm-chip-layer" aria-hidden="false"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/vendor/konva.min.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,604 @@
+/* Handwritten Arithmetic Recognition — GUI styles
+ *
+ * Chrome colours use Gradio CSS variables (resolve correctly under forced dark).
+ * Semantic colours (status dots, score ok/err, hero CTAs) remain hardcoded hex
+ * because they carry meaning independent of theme.
+ * Role/palette colours live in palette.py and are injected via Python-rendered HTML.
+ *
+ * Token system: --engine-* aliases delegate to Gradio theme variables.
+ * Fallbacks are dark-mode-safe values (the app forces dark).
+ */
+
+/* ── Token system ────────────────────────────────────────────────────────── */
+:root {
+    --engine-text:          var(--body-text-color,          #f9fafb);
+    --engine-text-sub:      var(--body-text-color-subdued,  #9ca3af);
+    --engine-bg-card:       var(--block-background-fill,    #1f2937);
+    --engine-bg-secondary:  var(--background-fill-secondary, #111827);
+    --engine-border:        var(--block-border-color,       #374151);
+    --engine-label-text:    var(--block-label-text-color,   #9ca3af);
+}
+
+/* ── Container ───────────────────────────────────────────────────────────── */
+.gradio-container {
+    max-width: 1300px !important;
+    margin: 0 auto !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.engine-header {
+    padding: 18px 0 12px;
+    border-bottom: 1px solid var(--engine-border);
+    margin-bottom: 16px;
+}
+.engine-header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--engine-text);
+    margin: 0 0 2px;
+    letter-spacing: -0.3px;
+}
+.engine-header p {
+    font-size: 13px;
+    color: var(--engine-text-sub);
+    margin: 0;
+}
+
+/* ── Status bar ──────────────────────────────────────────────────────────── */
+.engine-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    background: var(--engine-bg-secondary);
+    border: 1px solid var(--engine-border);
+    margin-bottom: 12px;
+}
+.engine-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+/* Semantic dot colours -- hardcoded, carry meaning */
+.engine-status-ok   { background: #22c55e; }
+.engine-status-warn { background: #f59e0b; }
+.engine-status-err  { background: #ef4444; }
+.engine-status-label { font-weight: 500; color: var(--engine-text); }
+.engine-status-meta  { color: var(--engine-text-sub); }
+
+/* ── Stage panel cards ───────────────────────────────────────────────────── */
+.engine-card {
+    background: var(--engine-bg-card);
+    border: 1px solid var(--engine-border);
+    border-radius: 8px;
+    padding: 14px;
+    height: 100%;
+    font-size: 13px;
+}
+.engine-card-header {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    /* Neutral subdued grey. NOT --block-label-text-color: the Gradio theme maps that
+       to its purple primary, which tinted these headers purple. */
+    color: var(--engine-text-sub);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--engine-border);
+}
+.engine-card-body {
+    color: var(--engine-text);
+    line-height: 1.7;
+}
+.engine-card-body .empty { color: var(--engine-text-sub); font-style: italic; }
+
+/* ── Token rows (Stage 1 coarse summary) ─────────────────────────────────── */
+.engine-token {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 0;
+}
+.engine-token-label { font-family: "SF Mono", "Fira Code", monospace; font-size: 13px; font-weight: 500; }
+.engine-token-count { color: var(--engine-text); font-size: 12px; font-family: monospace; font-weight: 600; }
+
+/* ── Row groups (Stage 2 + Result symbol rows) ───────────────────────────── */
+.engine-row-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--engine-border);
+}
+.engine-row-group:last-child { border-bottom: none; }
+.engine-row-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--engine-text-sub);
+    min-width: 40px;
+    flex-shrink: 0;
+}
+.engine-row-symbols {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+.engine-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "SF Mono", "Fira Code", "Courier New", monospace;
+    font-weight: 600;
+    cursor: default;
+    line-height: 1;
+    /* Role-coloured box: border + subtle tinted background */
+    padding: 2px 5px;
+    border-radius: 4px;
+    border: 1px solid var(--chip, var(--engine-border));
+    background: color-mix(in srgb, var(--chip, transparent) 18%, var(--engine-bg-card));
+    /* Glyph text stays near-white for maximum contrast on the tinted dark box */
+    color: var(--engine-text);
+}
+.engine-chip--result {
+    font-size: 22px !important;
+}
+.engine-row-group--result .engine-row-label {
+    font-size: 11px;
+    min-width: 44px;
+}
+
+/* Division bracket: CSS-drawn long-division corner (vertical + top bar) */
+.engine-chip--bracket {
+    /* Override text-based sizing: the shape is drawn via borders, no glyph text */
+    min-width: 18px;
+    min-height: 22px;
+    border: none;
+    background: transparent;
+    border-left: 2px solid var(--chip, var(--engine-text));
+    border-top: 2px solid var(--chip, var(--engine-text));
+    border-radius: 0;
+    border-top-left-radius: 3px;
+    padding: 0 4px 0 2px;
+    position: relative;
+}
+
+/* Result bar: full-width horizontal rule styled chip */
+.engine-chip--bar {
+    letter-spacing: -1px;
+}
+
+/* ── Row x column symbol grid (Stage 2 + Result) ──────────────────────────
+   Symbols align by predicted grid_col so place-value columns line up vertically. */
+.engine-grid {
+    display: grid;
+    gap: 5px 4px;
+    align-items: center;
+    justify-items: start;
+}
+.engine-grid-corner { min-width: 44px; }
+.engine-grid-collabel {
+    font-family: monospace;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--engine-text-sub);
+    text-align: center;
+    justify-self: center;
+}
+.engine-grid-rowlabel {
+    font-family: monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--engine-text-sub);
+    background: var(--engine-bg-secondary);
+    border: 1px solid var(--engine-border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    white-space: nowrap;
+}
+.engine-grid-cell {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    justify-content: center;
+    min-height: 26px;
+    justify-self: stretch;
+}
+/* A structural-only row (result bar) spans every data column. */
+.engine-grid-span {
+    grid-column: 2 / -1;
+    justify-content: stretch;
+}
+.engine-grid-span .engine-chip--bar { flex: 1; }
+
+/* ── Latency badge (consistent across Stage 1 / Stage 2 / Result headers) ─── */
+.engine-latency {
+    display: inline-block;
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--engine-text-sub);
+    background: var(--engine-bg-secondary);
+    border: 1px solid var(--engine-border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin-left: 6px;
+    vertical-align: middle;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+/* ── Equation result ─────────────────────────────────────────────────────── */
+/* Equation kind, shown in full (not clipped by the small uppercase card header):
+   a muted caption above the full-word value. */
+.engine-result-kind {
+    margin-bottom: 12px;
+}
+.engine-result-kind-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--engine-text-sub);
+    margin-bottom: 2px;
+}
+.engine-result-kind-value {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--engine-text);
+    word-break: break-word;
+}
+.engine-result-eq {
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 14px;
+    color: var(--engine-text);
+    background: var(--engine-bg-secondary);
+    border-radius: 6px;
+    padding: 10px 12px;
+    white-space: pre;
+    border: 1px solid var(--engine-border);
+    margin-top: 4px;
+}
+
+/* ── GT section ──────────────────────────────────────────────────────────── */
+.engine-gt-header {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--engine-text-sub);
+    margin-bottom: 10px;
+}
+
+/* ── Score bar ───────────────────────────────────────────────────────────── */
+.engine-score {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--engine-bg-secondary);
+    border: 1px solid var(--engine-border);
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--engine-text-sub);
+    margin-top: 8px;
+}
+.engine-score strong { color: var(--engine-text); font-weight: 600; }
+/* Semantic score colours -- hardcoded, carry meaning */
+.engine-score .ok  { color: #22c55e; font-weight: 600; }
+.engine-score .err { color: #ef4444; font-weight: 600; }
+
+/* ── Accordion override ──────────────────────────────────────────────────── */
+.gr-accordion summary {
+    font-size: 12px;
+    color: var(--engine-text-sub);
+}
+
+/* ── Showcase tab ────────────────────────────────────────────────────────── */
+
+/* Force side-by-side columns at all widths */
+.engine-sc-row {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 16px !important;
+    align-items: flex-start !important;
+}
+.engine-sc-row > * {
+    min-width: 0 !important;
+    flex: 1 1 0 !important;
+}
+
+.engine-sc-btn {
+    min-height: 48px !important;
+    font-size: 16px !important;
+}
+.engine-sc-hero-row {
+    gap: 8px !important;
+    margin-top: 12px !important;
+}
+
+/* Hero feedback buttons -- semantic CTA, hardcoded intentionally */
+.engine-sc-hero-yes,
+.engine-sc-hero-yes button {
+    min-height: 56px !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    background: #16a34a !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+}
+.engine-sc-hero-no,
+.engine-sc-hero-no button {
+    min-height: 56px !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    background: #dc2626 !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+}
+.engine-sc-hero-yes button:disabled,
+.engine-sc-hero-no button:disabled {
+    opacity: 0.45 !important;
+    cursor: not-allowed !important;
+}
+
+/* Status badges -- semantic, hardcoded intentionally */
+.engine-sc-saved-ok {
+    display: inline-block;
+    background: #dcfce7;
+    color: #166534;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+.engine-sc-saved-warn {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Equation kind banner -- neutral uses theme tokens; ok/ood keep tinted bg as semantic */
+.engine-sc-banner {
+    font-size: 18px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+    background: var(--engine-bg-secondary);
+    color: var(--engine-text-sub);
+}
+/* Semantic banner variants -- tinted bg is intentional meaning signal */
+.engine-sc-banner--ok {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+.engine-sc-banner--ood {
+    background: #fffbeb;
+    color: #b45309;
+}
+.engine-sc-banner--neutral {
+    background: var(--engine-bg-secondary);
+    color: var(--engine-text-sub);
+}
+
+/* Monospace pre block */
+.engine-sc-pre {
+    font-family: "JetBrains Mono", "Fira Mono", "SF Mono", "Courier New", monospace;
+    font-size: 15px;
+    line-height: 1.7;
+    white-space: pre;
+    overflow-x: auto;
+    background: var(--engine-bg-secondary);
+    border: 1px solid var(--engine-border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    color: var(--engine-text);
+    margin: 0 0 10px 0;
+    min-height: 80px;
+}
+.engine-sc-pre--empty {
+    color: var(--engine-text-sub);
+    font-style: italic;
+}
+
+.engine-sc-footer {
+    font-size: 12px;
+    color: var(--engine-text-sub);
+    margin-top: 16px;
+    text-align: right;
+}
+
+/* Help callout -- blue-tinted, left-border variant works in both themes */
+.engine-sc-help {
+    background: var(--engine-bg-secondary);
+    border-left: 3px solid #0284c7;
+    padding: 8px 12px;
+    margin: 4px 0 10px 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--engine-text);
+}
+.engine-sc-help code {
+    background: var(--engine-bg-card);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+}
+
+/* ── Full-width showcase ─────────────────────────────────────────────────── */
+.gradio-container, .gradio-container > .main, .gradio-container .app {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
+
+/* ── Input page (/input) ─────────────────────────────────────────────────── */
+.engine-input-page body {
+    margin: 0;
+}
+.engine-input-page .gradio-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+}
+.engine-input-page-header {
+    font-size: 22px;
+    font-weight: 600;
+    /* Semantic accent blue -- intentional brand colour */
+    color: #1d4ed8;
+    padding: 10px 18px 4px;
+}
+.engine-input-canvas {
+    flex: 1 1 auto;
+    min-height: 90vh;
+}
+.engine-input-btn-row {
+    padding: 10px 18px;
+    gap: 12px;
+}
+.engine-input-primary-btn,
+.engine-input-secondary-btn {
+    min-height: 54px;
+    font-size: 18px;
+    border-radius: 10px;
+}
+/* Semantic status colours -- hardcoded, carry meaning */
+.engine-inp-status-ok {
+    color: #16a34a;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 4px 12px;
+}
+.engine-inp-status-warn {
+    color: #b45309;
+    font-size: 14px;
+    padding: 4px 12px;
+}
+
+/* ── Results page (/results) ─────────────────────────────────────────────── */
+.engine-results-page body {
+    margin: 0;
+}
+.engine-results-page .gradio-container {
+    min-height: 100vh;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 12px !important;
+}
+.engine-results-page-header {
+    font-size: 20px;
+    font-weight: 600;
+    /* Semantic accent blue -- intentional brand colour */
+    color: #1d4ed8;
+    padding: 10px 6px 4px;
+}
+
+/* ── Input page (iPad-landscape no-scroll layout) ────────────────────────── */
+.engine-input-page {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+}
+.engine-input-row {
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    gap: 12px !important;
+}
+.engine-input-left, .engine-input-right {
+    overflow: hidden !important;
+}
+.engine-input-canvas, .engine-input-thumb {
+    width: 100% !important;
+}
+.engine-input-page-header {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--engine-text);
+    margin: 0 0 8px 0;
+}
+.engine-input-btn-row {
+    margin-top: 10px;
+    gap: 12px !important;
+}
+.engine-input-primary-btn, .engine-input-secondary-btn {
+    min-height: 56px !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+}
+/* Semantic inline status -- hardcoded, carry meaning */
+.engine-inp-status-ok {
+    color: #16a34a;
+    font-weight: 600;
+    padding: 4px 10px;
+    background: #dcfce7;
+    border-radius: 6px;
+}
+.engine-inp-status-warn {
+    color: #b45309;
+    font-weight: 600;
+    padding: 4px 10px;
+    background: #fef3c7;
+    border-radius: 6px;
+}
+
+/* Force input page to fit iPad landscape viewport */
+.engine-input-page, .engine-input-page > * {
+    max-height: 100vh;
+}
+.engine-input-page-header {
+    font-size: 14px !important;
+    margin: 0 0 4px 0 !important;
+}
+.engine-input-canvas, .engine-input-thumb {
+    max-height: calc(100vh - 140px) !important;
+}
+.engine-input-btn-row {
+    margin-top: 6px !important;
+}
+.engine-input-primary-btn, .engine-input-secondary-btn {
+    min-height: 44px !important;
+    font-size: 16px !important;
+}
+
+/* Quick links to the standalone /input and /results presenter pages */
+.engine-quicklinks {
+    display: flex;
+    gap: 10px;
+    margin: 8px 0 14px;
+}
+.engine-quicklink {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--engine-border, #3a3a3a);
+    background: var(--engine-bg-card, #1e1e1e);
+    color: var(--engine-text, #e6e6e6) !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+.engine-quicklink:hover {
+    background: var(--engine-bg-secondary, #2a2a2a);
+    border-color: var(--engine-text-sub, #6aa3ff);
+}

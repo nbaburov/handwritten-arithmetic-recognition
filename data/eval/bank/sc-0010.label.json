@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "sample": "sc-0010",
+  "equation_kind": "addition",
+  "provenance": {
+    "source": "showcase_cleaned",
+    "orig_sample": "sample_0011",
+    "orig_session": "5323f9c2",
+    "labeled_by": "vision_manual_pass_v2"
+  },
+  "symbols": [
+    {"flattened": "main_2", "bbox_px": [106, 105, 142, 148]},
+    {"flattened": "main_0", "bbox_px": [152, 101, 189, 142]},
+    {"flattened": "main_2", "bbox_px": [196, 104, 239, 139]},
+    {"flattened": "main_6", "bbox_px": [248, 94, 314, 159]},
+    {"flattened": "op_plus", "bbox_px": [50, 161, 81, 191]},
+    {"flattened": "main_1", "bbox_px": [110, 182, 134, 239]},
+    {"flattened": "main_1", "bbox_px": [152, 181, 183, 231]},
+    {"flattened": "main_3", "bbox_px": [182, 191, 232, 245]},
+    {"flattened": "main_3", "bbox_px": [232, 200, 280, 260]},
+    {"flattened": "result_bar", "bbox_px": [72, 245, 358, 264]}
+  ],
+  "intended_text": "2026 + 1133 = (partial, no result)",
+  "notes": "Audit fix (2026-05-21): rewrote bboxes from connected components. Removed spurious 3rd main_3 sentinel. Last 3 merged with bar in CC; estimated separated bboxes. 10 symbols."
+}
