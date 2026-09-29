@@ -31,7 +31,7 @@ A feedback demo (FastAPI + Konva) lets a child solve an exercise on a canvas; th
 Requires Python 3.12.
 
 ```bash
-git clone https://github.com/nixxxo/handwritten-arithmetic-recognition.git
+git clone https://github.com/nbaburov/handwritten-arithmetic-recognition.git
 cd handwritten-arithmetic-recognition
 ./scripts/setup_venv.sh
 export PP="$(pwd)"
