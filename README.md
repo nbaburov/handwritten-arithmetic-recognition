@@ -75,4 +75,4 @@ N. B., N. N. and T. v. d. P. (Fontys University of Applied Sciences).
 
 ## License
 
-Apache-2.0: see [LICENSE](LICENSE).
+[AGPL-3.0](LICENSE), Copyright 2026 Nikola Baburov. Free to use, modify and run as a service if your whole product is released under the AGPL too. Commercial licenses without the AGPL obligations are available from [NB Limited](https://nb-limited.com). Stage 1 detection uses [Ultralytics](https://github.com/ultralytics/ultralytics) (AGPL-3.0); closed commercial use also needs an Ultralytics Enterprise license.
