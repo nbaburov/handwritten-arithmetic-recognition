@@ -4,6 +4,8 @@ Reads a photo or tablet drawing of handwritten column arithmetic and returns its
 
 Group project, Fontys University of Applied Sciences (AI specialisation, 2026), built with an education-technology partner for children aged 6 to 12.
 
+Write-up: [Math Notes for kids, on one CPU](https://nb.nb-limited.com/writing/reading-column-arithmetic).
+
 > Shared as a reference. Not actively maintained for external contributions.
 
 | Detection (stage 1) | Structured result (stages 2 and 3) |
