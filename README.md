@@ -4,7 +4,7 @@ Reads a photo or tablet drawing of handwritten column arithmetic and returns its
 
 Group project, Fontys University of Applied Sciences (AI specialisation, 2026), built with an education-technology partner for children aged 6 to 12.
 
-Write-up: [Combining what I love: maths and tech](https://nb.nb-limited.com/writing/reading-column-arithmetic), on how it was built and why it's shaped this way.
+Write-up: [Combining what I love: maths and tech](https://nb.nb-limited.com/writing/combining-what-i-love-maths-and-tech), on how it was built and why it's shaped this way.
 
 | Detection (stage 1) | Structured result (stages 2 and 3) |
 |---|---|
