@@ -4,9 +4,7 @@ Reads a photo or tablet drawing of handwritten column arithmetic and returns its
 
 Group project, Fontys University of Applied Sciences (AI specialisation, 2026), built with an education-technology partner for children aged 6 to 12.
 
-Write-up: [Math Notes for kids, on one CPU](https://nb.nb-limited.com/writing/reading-column-arithmetic).
-
-> Shared as a reference. Not actively maintained for external contributions.
+Write-up: [Combining what I love: maths and tech](https://nb.nb-limited.com/writing/reading-column-arithmetic), on how it was built and why it's shaped this way.
 
 | Detection (stage 1) | Structured result (stages 2 and 3) |
 |---|---|
@@ -77,4 +75,6 @@ N. B., N. N. and T. v. d. P. (Fontys University of Applied Sciences).
 
 ## License
 
-[AGPL-3.0](LICENSE), Copyright 2026 Nikola Baburov. Free to use, modify and run as a service if your whole product is released under the AGPL too. Commercial licenses without the AGPL obligations are available from [NB Limited](https://nb-limited.com). Stage 1 detection uses [Ultralytics](https://github.com/ultralytics/ultralytics) (AGPL-3.0); closed commercial use also needs an Ultralytics Enterprise license.
+[AGPL-3.0](LICENSE), Copyright 2026 Nikola Baburov, Mohamad Nagib Bankesli and Tessa van der Poel. Free to use, modify and run as a service if your whole product is released under the AGPL too. Commercial licenses without the AGPL obligations are available from [NB Limited](https://nb-limited.com). Stage 1 detection uses [Ultralytics](https://github.com/ultralytics/ultralytics) (AGPL-3.0); closed commercial use also needs an Ultralytics Enterprise license.
+
+This repository is a showcase, so it doesn't take issues or pull requests. Forks are welcome under the license.
