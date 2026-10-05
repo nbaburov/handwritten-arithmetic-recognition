@@ -28,7 +28,7 @@ A feedback demo (FastAPI + Konva) lets a child solve an exercise on a canvas; th
 
 ## Quickstart
 
-Requires Python 3.12.
+Requires Python 3.12. On a minimal Linux image, install `libgl1 libglib2.0-0 libxcb1` first: Ultralytics pulls in the desktop build of OpenCV, which needs them.
 
 ```bash
 git clone https://github.com/nbaburov/handwritten-arithmetic-recognition.git
